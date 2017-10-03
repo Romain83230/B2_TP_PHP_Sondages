@@ -22,11 +22,11 @@ class AddSurveyAction extends Action {
 	 *
 	 * Le visiteur est finalement envoyé vers le formulaire d'ajout de sondage en cas d'erreur
 	 * ou vers une vue affichant le message "Merci, nous avons ajouté votre sondage.".
-	 * 
+	 *
 	 * @see Action::run()
 	 */
 	public function run() {
-		/* TODO START */
+
 		/* TODO END */
 	}
 
