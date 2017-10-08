@@ -2,7 +2,9 @@
 
 require_once("actions/Action.inc.php");
 
+
 class SignUpAction extends Action {
+
 
 	/**
 	 * Traite les données envoyées par le formulaire d'inscription
@@ -21,7 +23,15 @@ class SignUpAction extends Action {
 	 * @see Action::run()
 	 */
 	public function run() {
+        $db = new Database;
 		/* TODO START */
+		if ($_POST['signUpPassword'] != $_POST['signUpPassword2']) {
+			echo "Le mot de passe et sa confirmation sont différents.";
+
+		} else {
+			echo $db->addUser($_POST['signUpLogin'], $_POST['signUpPassword']);
+		}
+
 		/* TODO END */
 	}
 

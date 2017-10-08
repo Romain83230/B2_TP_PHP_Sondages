@@ -48,7 +48,6 @@ class Database {
             " title char(255),".
 			"count integer".
             ");");
-
 	}
 
 	/**
@@ -60,6 +59,13 @@ class Database {
 	 */
 	private function checkNicknameValidity($nickname) {
 		/* TODO START */
+
+        $bool = (strlen($nickname) <=3 || strlen($nickname)>=10) ? false : true;
+        if ($bool) {
+            $bool = preg_match("/[0-9]+/", $nickname) ? false : true;
+        }
+
+        return $bool;
 		/* TODO END */
 	}
 
@@ -72,6 +78,8 @@ class Database {
 	 */
 	private function checkPasswordValidity($password) {
 		/* TODO START */
+        $bool = (strlen($password) <=3 || strlen($password)>=10) ? false : true;
+        return $bool;
 		/* TODO END */
 	}
 
@@ -83,6 +91,13 @@ class Database {
 	 */
 	private function checkNicknameAvailability($nickname) {
 		/* TODO START */
+
+        $nickExist = $this-> connection -> prepare("SELECT nickname FROM users WHERE nickname = :nickname");
+        $nickExist->bindParam(':nickname' , $nickname);
+        $nickExist -> execute();
+
+        $bool = $nickExist->rowCount() ? false : true; // true si pseudo dispo
+        return $bool;
 		/* TODO END */
 	}
 
@@ -95,6 +110,9 @@ class Database {
 	 */
 	public function checkPassword($nickname, $password) {
 		/* TODO START */
+        $bool = ($this->checkNicknameValidity($nickname) && $this->checkNicknameAvailability($nickname)
+            && $this->checkPasswordValidity($password)) ? true : false;
+        return $bool;
 		/* TODO END */
 	}
 
@@ -111,8 +129,24 @@ class Database {
 	 */
 	public function addUser($nickname, $password) {
 	  /* TODO START */
+
+	    if($this->checkNicknameValidity($nickname) === false) {
+            $result = "Le pseudo doit contenir entre 3 et 10 lettres.";
+        } else {
+            if($this->checkNicknameAvailability($nickname) === false) {
+                $result = "Le pseudo existe déjà.";
+            } else {
+                if($this->checkPasswordValidity($password) === false) {
+                    $result = "Le mot de passe doit contenir entre 3 et 10 caractères.";
+                } else {
+                    $result = true;
+                }
+            }
+        }
+
+	    return $result;
 	  /* TODO END */
-	  return true;
+
 	}
 
 	/**

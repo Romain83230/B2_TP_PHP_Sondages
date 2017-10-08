@@ -1,4 +1,6 @@
 <?php
+var_dump("A ENLEVER");
+
 session_start();
 
 function getActionByName($name) {
@@ -17,22 +19,25 @@ function getAction() {
 	if (!isset($_REQUEST['action'])) $action = 'Default';
 	else $action = $_REQUEST['action'];
 
-	$actions = array('Default',
-			/*'SignUpForm',
+	$actions = array(
+	        'Default',
+			'SignUpForm',
 			'SignUp',
 			'Logout',
 			'Login',
 			'UpdateUserForm',
 			'UpdateUser',
-			'AddSurveyForm',
+    		'AddSurveyForm',
 			'AddSurvey',
 			'GetMySurveys',
 			'Search',
-			'Vote'*/);
+			'Vote'
+	);
 
 	if (!in_array($action, $actions)) $action = 'Default';
 	return getActionByName($action);
 }
+
 
 $action = getAction();
 $action->run();
