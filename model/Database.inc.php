@@ -110,9 +110,19 @@ class Database {
 	 */
 	public function checkPassword($nickname, $password) {
 		/* TODO START */
-        $bool = ($this->checkNicknameValidity($nickname) && $this->checkNicknameAvailability($nickname)
-            && $this->checkPasswordValidity($password)) ? true : false;
-        return $bool;
+		$psdBDD = $this->connection->prepare("SELECT password FROM users WHERE nickname =:nickname");
+        $psdBDD -> bindParam(':nickname', $nickname);
+        $psdBDD -> execute();
+        $psdBDD = $psdBDD->fetch()['password'];
+
+        $psd = hash("sha1", $password);
+
+        if ($psd === $psdBDD) {
+            return true;
+        } else {
+            return false;
+        }
+
 		/* TODO END */
 	}
 
@@ -140,11 +150,11 @@ class Database {
                     $result = "Le mot de passe doit contenir entre 3 et 10 caractères.";
                 } else {
                     $result = true;
-                    $this->connection ->exec("INSERT INTO `users` (`nickname`, `password`) VALUES ('$nickname', '$password')");
+                    $crypPsd = hash('sha1', $password);
+                    $this->connection ->exec("INSERT INTO `users` (`nickname`, `password`) VALUES ('$nickname', '$crypPsd')");
                 }
             }
         }
-
 	    return $result;
 	  /* TODO END */
 

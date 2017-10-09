@@ -24,16 +24,24 @@ class SignUpAction extends Action {
 	 */
 	public function run() {
         $db = new Database;
+
+
 		/* TODO START */
 		if ($_POST['signUpPassword'] != $_POST['signUpPassword2']) {
 			echo "Le mot de passe et sa confirmation sont différents.";
+            $this->setSignUpFormView($db->addUser($_POST['signUpLogin'], $_POST['signUpPassword']));
 
 		} else {
-			if ($db->addUser($_POST['signUpLogin'], $_POST['signUpPassword']) == true) {
+		    if ($db->addUser($_POST['signUpLogin'], $_POST['signUpPassword']) == 1) {
+                $this->setView(getViewByName("Message"));
+                $this->getView()->setMessage("Inscription validée, merci");
+            } else {
+                $this->setSignUpFormView($db->addUser($_POST['signUpLogin'], $_POST['signUpPassword']));
                 $db->addUser($_POST['signUpLogin'], $_POST['signUpPassword']);
-				echo "MESSAGEVIEW Page";
             }
-			else echo ($db->addUser($_POST['signUpLogin'], $_POST['signUpPassword']));
+
+
+
 		}
 
 		/* TODO END */
