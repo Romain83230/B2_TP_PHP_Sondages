@@ -44,18 +44,17 @@ class Database
             ");" . "CREATE TABLE IF NOT EXISTS surveys (" .
             " id int NOT NULL AUTO_INCREMENT PRIMARY KEY ,	" .
             " owner char(20)," .
-            " question char(250)," .
-            " nicknam char(20)" .
+            " question char(250)" .
             ");" . "CREATE TABLE IF NOT EXISTS responses (" .
             " id int NOT NULL AUTO_INCREMENT PRIMARY KEY ,	" .
             " id_survey integer," .
             " title char(255)," .
             "count integer" .
             ");");
-        $this->connection->exec(    "ALTER TABLE surveys ADD CONSTRAINT FK_users_nickname 
-                                              FOREIGN KEY (nicknam) REFERENCES users(nickname);" .
-                                             "ALTER TABLE responses ADD CONSTRAINT FK_ID_SURVEY 
-                                              FOREIGN KEY (id_survey) REFERENCES surveys(id);" );
+        $this->connection->exec("ALTER TABLE surveys ADD CONSTRAINT FK_users_nickname 
+                                              FOREIGN KEY (owner) REFERENCES users(nickname);" .
+            "ALTER TABLE responses ADD CONSTRAINT FK_ID_SURVEY 
+                                              FOREIGN KEY (id_survey) REFERENCES surveys(id);");
     }
 
     /**
@@ -209,14 +208,25 @@ class Database
      * @param Survey $survey Sondage à sauvegarder.
      * @return boolean True si la sauvegarde a été réalisée avec succès, false sinon.
      */
-    public function saveSurvey($survey)
+    public function saveSurvey(array $survey, $nickname)
     {
         /* TODO START */
 
 
+        $question = trim ($survey[0]);
+        $postQuestion = $this->connection->exec("INSERT INTO surveys (question, owner)VALUES (\"$question\", \"$nickname\") ");
+        $idSurvey = $this->connection->query("SELECT id FROM surveys WHERE question = \"$question\" ");
+        $id = $idSurvey->fetch()['id'];
+        if ($postQuestion) {
+            for ($i = 1; $i <= sizeof($survey) - 1; $i++) {
+                $this->saveResponse(($survey[$i]),$id);
+            }
+            return true;
+        } else return false;
+
 
         /* TODO END */
-        return true;
+
     }
 
     /**
@@ -225,11 +235,16 @@ class Database
      * @param Response $response Réponse à sauvegarder.
      * @return boolean True si la sauvegarde a été réalisée avec succès, false sinon.
      */
-    private function saveResponse($response)
+    private function saveResponse($response, $idArray)
     {
         /* TODO START */
+
+        $postQuestion = $this->connection->exec("INSERT INTO responses (id_survey, title)VALUES (\" $idArray \", \" $response\") ");
+
+        if ($postQuestion) return true;
+        else return false;
+
         /* TODO END */
-        return true;
     }
 
     /**
