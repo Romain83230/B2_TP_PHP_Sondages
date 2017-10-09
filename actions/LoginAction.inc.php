@@ -17,12 +17,9 @@ class LoginAction extends Action {
   	/* TODO START */
         $nickname = $_POST['nickname'];
         if ($this->database->checkPassword($nickname, $_POST['password']) === true) {
-
             $this->setView(getViewByName("Message"));
             $this->getView()->setMessage("Vous êtes connecté");
-
             $this->setSessionLogin($nickname);
-
         } else {
             $this->setView(getViewByName("Message"));
             $this->getView()->setMessage("Pseudo ou mot de passe incorrect.");
