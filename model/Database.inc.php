@@ -140,6 +140,7 @@ class Database {
                     $result = "Le mot de passe doit contenir entre 3 et 10 caractères.";
                 } else {
                     $result = true;
+                    $this->connection ->exec("INSERT INTO `users` (`nickname`, `password`) VALUES ('$nickname', '$password')");
                 }
             }
         }

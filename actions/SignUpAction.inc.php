@@ -29,7 +29,11 @@ class SignUpAction extends Action {
 			echo "Le mot de passe et sa confirmation sont différents.";
 
 		} else {
-			echo $db->addUser($_POST['signUpLogin'], $_POST['signUpPassword']);
+			if ($db->addUser($_POST['signUpLogin'], $_POST['signUpPassword']) == true) {
+                $db->addUser($_POST['signUpLogin'], $_POST['signUpPassword']);
+				echo "MESSAGEVIEW Page";
+            }
+			else echo ($db->addUser($_POST['signUpLogin'], $_POST['signUpPassword']));
 		}
 
 		/* TODO END */
