@@ -44,13 +44,18 @@ class Database
             ");" . "CREATE TABLE IF NOT EXISTS surveys (" .
             " id int NOT NULL AUTO_INCREMENT PRIMARY KEY ,	" .
             " owner char(20)," .
-            " question char(250)" .
+            " question char(250)," .
+            " nicknam char(20)" .
             ");" . "CREATE TABLE IF NOT EXISTS responses (" .
             " id int NOT NULL AUTO_INCREMENT PRIMARY KEY ,	" .
             " id_survey integer," .
             " title char(255)," .
             "count integer" .
             ");");
+        $this->connection->exec(    "ALTER TABLE surveys ADD CONSTRAINT FK_users_nickname 
+                                              FOREIGN KEY (nicknam) REFERENCES users(nickname);" .
+                                             "ALTER TABLE responses ADD CONSTRAINT FK_ID_SURVEY 
+                                              FOREIGN KEY (id_survey) REFERENCES surveys(id);" );
     }
 
     /**
@@ -64,7 +69,7 @@ class Database
     {
         /* TODO START */
 
-        $bool = (strlen($nickname) <= 3 || strlen($nickname) >= 10) ? false : true;
+        $bool = (strlen($nickname) <= 2 || strlen($nickname) >= 10) ? false : true;
         if ($bool) {
             $bool = preg_match("/[0-9]+/", $nickname) ? false : true;
         }
@@ -83,7 +88,7 @@ class Database
     private function checkPasswordValidity($password)
     {
         /* TODO START */
-        $bool = (strlen($password) <= 3 || strlen($password) >= 10) ? false : true;
+        $bool = (strlen($password) <= 2 || strlen($password) >= 10) ? false : true;
         return $bool;
         /* TODO END */
     }
@@ -207,6 +212,9 @@ class Database
     public function saveSurvey($survey)
     {
         /* TODO START */
+
+
+
         /* TODO END */
         return true;
     }

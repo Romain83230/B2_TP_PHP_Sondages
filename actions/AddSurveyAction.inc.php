@@ -27,6 +27,13 @@ class AddSurveyAction extends Action {
 	 */
 	public function run() {
 		/* TODO START */
+		    if ($this->getSessionLogin() === null) {
+                $this->setView(getViewByName("Message"));
+                $this->getView()->setMessage("Vous devez vous loger avant de poster un sondage");
+            } else {
+
+            }
+
 		/* TODO END */
 	}
 
