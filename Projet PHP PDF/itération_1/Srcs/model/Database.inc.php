@@ -52,7 +52,7 @@ class Database
             "count integer" .
             ");");
         $this->connection->exec("ALTER TABLE surveys ADD CONSTRAINT FK_users_nickname 
-                                              FOREIGN KEY (owner) REFERENCES nickname.users;" .
+                                              FOREIGN KEY (owner) REFERENCES users(nickname);" .
             "ALTER TABLE responses ADD CONSTRAINT FK_ID_SURVEY 
                                               FOREIGN KEY (id_survey) REFERENCES surveys(id);");
     }
@@ -105,7 +105,6 @@ class Database
         $nickExist = $this->connection->prepare("SELECT nickname FROM users WHERE nickname = :nickname");
         $nickExist->bindParam(':nickname', $nickname);
         $nickExist->execute();
-
 
         $bool = $nickExist->rowCount() ? false : true; // true si pseudo dispo
         return $bool;
@@ -266,7 +265,6 @@ class Database
      * @param string $keyword Mot clé à chercher.
      * @return array(Survey)|boolean Sondages trouvés par la fonction ou false si une erreur s'est produite.
      */
-
     public function loadSurveysByKeyword($keyword)
     {
         /* TODO START */
