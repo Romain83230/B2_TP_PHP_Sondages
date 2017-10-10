@@ -256,6 +256,27 @@ class Database
     public function loadSurveysByOwner($owner)
     {
         /* TODO START */
+        $SurveyList = array();
+
+        
+            $LoadSurveys = $this->connection->prepare("SELECT DISTINCT question FROM surveys WHERE owner = :utilisateur  ");
+            $LoadSurveys->bindParam( ':utilisateur', $owner );
+            $LoadSurveys->execute();
+            $LoadSurveys = $LoadSurveys->fetchAll();
+
+            var_dump($LoadSurveys[0][0]);
+            for($i=0; $i < sizeof($LoadSurveys); $i++) {
+                $SurveyList[$i] = $LoadSurveys[$i][0];
+            }
+            var_dump($SurveyList);
+            // if ($LoadSurveys != null) {
+            //     $SurveyList = array_push($LoadSurveys);
+            //     return SurveyList;
+            // } else {
+            //     return false;
+            // }
+        
+
         /* TODO END */
     }
 
