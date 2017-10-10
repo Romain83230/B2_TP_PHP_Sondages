@@ -1,7 +1,7 @@
 
 <li class="media well">
 	<div class="media-body">
-		<h4 class="media-heading"><?php= $survey->getQuestion() ?></h4>
+		<h4 class="media-heading"><?php $survey->getQuestion() ?></h4>
 		<br>
 	  <?php
 	  foreach ($survey->getResponses() as $response) {
