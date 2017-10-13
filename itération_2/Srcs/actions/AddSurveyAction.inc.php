@@ -40,7 +40,10 @@ class AddSurveyAction extends Action
             } else {
                 $reponse = array();
                 for ($i = 1; $i <= 6; $i++) {
-                    if ( $i == 6 || $_POST['responseSurvey' . $i] == null) break;
+                    if (( $i == 6 || $_POST['responseSurvey' . $i]) == null){
+                        break;
+                    }
+
                     $reponse[$i] = htmlentities($_POST['responseSurvey' . $i]);
                 }
                 if (sizeof($reponse) < 2) {
@@ -59,6 +62,7 @@ class AddSurveyAction extends Action
         }
         /* TODO END */
     }
+
 
     private function setAddSurveyFormView($message)
     {
