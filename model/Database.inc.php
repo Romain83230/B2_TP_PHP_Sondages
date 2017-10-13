@@ -7,7 +7,7 @@ class Database
 
     private $connection;
 
-    /**
+    /*
      * Ouvre la base de données. Si la base n'existe pas elle
      * est créée à l'aide de la méthode createDataBase().
      */
@@ -25,7 +25,7 @@ class Database
     }
 
 
-    /**
+    /*
      * Initialise la base de données ouverte dans la variable $connection.
      * Cette méthode crée, si elles n'existent pas, les trois tables :
      * - une table users(nickname char(20), password char(50));
@@ -51,13 +51,13 @@ class Database
             " title char(255)," .
             "count integer" .
             ");");
-        $this->connection->exec("ALTER TABLE surveys ADD CONSTRAINT FK_users_nickname 
+        $this->connection->exec("ALTER TABLE surveys ADD CONSTRAINT FK_users_nickname
                                               FOREIGN KEY (owner) REFERENCES nickname.users;" .
-            "ALTER TABLE responses ADD CONSTRAINT FK_ID_SURVEY 
+            "ALTER TABLE responses ADD CONSTRAINT FK_ID_SURVEY
                                               FOREIGN KEY (id_survey) REFERENCES surveys(id);");
     }
 
-    /**
+    /*
      * Vérifie si un pseudonyme est valide, c'est-à-dire,
      * s'il contient entre 3 et 10 caractères et uniquement des lettres.
      *
@@ -77,7 +77,7 @@ class Database
         /* TODO END */
     }
 
-    /**
+    /*
      * Vérifie si un mot de passe est valide, c'est-à-dire,
      * s'il contient entre 3 et 10 caractères.
      *
@@ -92,7 +92,7 @@ class Database
         /* TODO END */
     }
 
-    /**
+    /*
      * Vérifie la disponibilité d'un pseudonyme.
      *
      * @param string $nickname Pseudonyme à vérifier.
@@ -112,7 +112,7 @@ class Database
         /* TODO END */
     }
 
-    /**
+    /*
      * Vérifie qu'un couple (pseudonyme, mot de passe) est correct.
      *
      * @param string $nickname Pseudonyme.
@@ -138,7 +138,7 @@ class Database
         /* TODO END */
     }
 
-    /**
+    /*
      * Ajoute un nouveau compte utilisateur si le pseudonyme est valide et disponible et
      * si le mot de passe est valide. La méthode peut retourner un des messages d'erreur qui suivent :
      * - "Le pseudo doit contenir entre 3 et 10 lettres.";
@@ -173,7 +173,7 @@ class Database
 
     }
 
-    /**
+    /*
      * Change le mot de passe d'un utilisateur.
      * La fonction vérifie si le mot de passe est valide. S'il ne l'est pas,
      * la fonction retourne le texte 'Le mot de passe doit contenir entre 3 et 10 caractères.'.
@@ -202,7 +202,7 @@ class Database
 
     }
 
-    /**
+    /*
      * Sauvegarde un sondage dans la base de donnée et met à jour les indentifiants
      * du sondage et des réponses.
      *
@@ -230,7 +230,7 @@ class Database
 
     }
 
-    /**
+    /*
      * Sauvegarde une réponse dans la base de donnée et met à jour son indentifiant.
      *
      * @param Response $response Réponse à sauvegarder.
@@ -248,7 +248,7 @@ class Database
         /* TODO END */
     }
 
-    /**
+    /*
      * Charge l'ensemble des sondages créés par un utilisateur.
      *
      * @param string $owner Pseudonyme de l'utilisateur.
@@ -257,10 +257,11 @@ class Database
     public function loadSurveysByOwner($owner)
     {
         /* TODO START */
+        
         /* TODO END */
     }
 
-    /**
+    /*
      * Charge l'ensemble des sondages dont la question contient un mot clé.
      *
      * @param string $keyword Mot clé à chercher.
@@ -301,7 +302,7 @@ class Database
         return $surveys;
     }
 
-    /**
+    /*
      * Construit un tableau de réponses à partir d'un tableau de ligne de la table 'responses'.
      * Ce tableau a été obtenu à l'aide de la méthode fetchAll() de PDO.
      *
