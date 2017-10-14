@@ -257,6 +257,25 @@ class Database
     public function loadSurveysByOwner($owner)
     {
         /* TODO START */
+
+        $Survey = array();
+
+        $getQs_rep = $this->connection->prepare("SELECT surveys.owner, surveys.question, surveys.id, responses.title FROM surveys 
+            INNER JOIN responses ON responses.id_survey = surveys.id WHERE surveys.owner = :nickname");
+        $getQs_rep->bindParam(':nickname', $owner);
+        $getQs_rep->execute();
+        $getQs_rep = $getQs_rep->fetchAll();
+
+        for ($i = 0; $i < sizeof($getQs_rep) ; $i++) {
+            for ($j = 0; $j <sizeof($getQs_rep[$i])/2 ;  $j++ ) {
+                array_push($Survey, $getQs_rep[$i][$j]);
+            }
+        }
+        return $Survey;
+
+//        $bool = (sizeof($questionSurvey) >= 1 ) ?  true : false;
+//        if ($bool) return $questionSurvey;
+//        else return false;
         /* TODO END */
     }
 

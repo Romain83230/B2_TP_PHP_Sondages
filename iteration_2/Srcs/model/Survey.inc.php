@@ -43,6 +43,7 @@ class Survey {
 	
 	public function computePercentages() {
 		/* TODO START */
+			var_dump("coucou");
 		/* TODO END */
 	}
 
