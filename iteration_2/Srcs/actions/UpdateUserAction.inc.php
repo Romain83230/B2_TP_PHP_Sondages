@@ -23,9 +23,14 @@ class UpdateUserAction extends Action {
 	public function run() {
 		/* TODO START */
 		if ($_POST['updatePassword'] === $_POST['updatePassword2']) {
-			$this->database->updateUser($this->getSessionLogin(), $_POST['updatePassword']);
-            $this->setView(getViewByName("Message"));
-            $this->getView()->setMessage("Vous avez modifié votre mot de passe");
+			if ($this->database->updateUser($this->getSessionLogin(), $_POST['updatePassword']) === true) {
+                $this->setView(getViewByName("Message"));
+                $this->getView()->setMessage("Modification enregistrée");
+            }
+            else {
+                $this->setView(getViewByName("Message"));
+                $this->getView()->setMessage($this->database->updateUser($this->getSessionLogin(), $_POST['updatePassword']));
+            }
 		} else {
             $this->setView(getViewByName("Message"));
             $this->getView()->setMessage("les deux mots de passes entrés ne sont pas concordants");

@@ -19,11 +19,13 @@ class VoteAction extends Action {
 	public function run() {
 		
 		$responseId = "";
+
+
 		
 		if (isset($_POST["responseId"])) $responseId = (int)trim($_POST["responseId"]);
 		
 		$r = $this->database->vote((int)$responseId);
-		
+
 		if ($r===false) {
 			$this->setMessageView("Impossible d'enregistrer votre vote.", "alert-error");
 			return;

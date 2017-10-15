@@ -14,29 +14,21 @@ class GetMySurveysAction extends Action
      *
      * @see Action::run()
      */
-     public function run()
+    public function run()
 
-     {
-          /* TODO START */
-         if ($this->getSessionLogin() == null) {
-              $this->setView(getViewByName("Message"));
-              $this->getView()->setMessage("Veuillez-vous connecter");
-          } else {
-              $surveys = $this->database->loadSurveysByOwner($this->getSessionLogin());
-  //            var_dump($surveys);
-              foreach ($surveys as $object) {
-  			    $qs = new Survey($object["owner"], $object["owner"]);
-              }
-              $this->getView()->setSurveys($surveys);
-  //			$rep->setResponses($this->database->loadRes)
-  //            $reponse = $this->database -> loadResponses($surveys, $arrayResponses)
-  //			var_dump($surveys);
-  //
-  //		$this->getView()->setSurveys($surveys);
-              $this->setView(getViewByName("Surveys"));
-          }
-          /* TODO END */
-      }
+    {
+        /* TODO START */
+
+        $pseudo = $this->getSessionLogin();
+        if ($pseudo == null ) {
+            $this->setView(getViewByName("Message"));
+            $this->getView()->setMessage("Veuillez-vous connecter");
+        } else {
+            $this->setView(getViewByName("Surveys"));
+            $this->getView()->setSurveys($this->database->loadSurveysByOwner($pseudo));
+        }
+        /* TODO END */
+    }
 
 }
 

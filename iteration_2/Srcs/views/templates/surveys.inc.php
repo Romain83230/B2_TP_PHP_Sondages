@@ -6,7 +6,7 @@
 	<ul class="media-list">
 		<?php
 				foreach ($this->surveys as $survey) {
-				    var_dump($survey);
+//				    var_dump($survey);
 					$survey->computePercentages();
 					require("survey.inc.php");
 				}

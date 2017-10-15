@@ -17,6 +17,16 @@ class Database
         $dbBd = "sondages";
         $dbPass = "";
         $dbLogin = "root";
+
+        try {
+            $dbh = new PDO("mysql:host=localhost", $dbLogin, $dbPass);
+
+            $dbh->exec("CREATE DATABASE IF NOT EXISTS `$dbBd` ;")
+            or die(print_r($dbh->errorInfo(), true));
+        } catch (PDOException $e) {
+            die("Probleme au niveau de la base de donnee : ". $e->getMessage());
+        }
+
         $url = 'mysql:host=' . $dbHost . ';dbname=' . $dbBd;
         //$url = 'sqlite:database.sqlite';
         $this->connection = new PDO($url, $dbLogin, $dbPass);
@@ -38,7 +48,8 @@ class Database
      */
     private function createDataBase()
     {
-        $this->connection->exec("CREATE TABLE IF NOT EXISTS users (" .
+        $this->connection->exec(
+        "CREATE TABLE IF NOT EXISTS users (" .
             " nickname char(20)," .
             " password char(50)" .
             ");" . "CREATE TABLE IF NOT EXISTS surveys (" .
@@ -49,7 +60,7 @@ class Database
             " id int NOT NULL AUTO_INCREMENT PRIMARY KEY ,	" .
             " id_survey integer," .
             " title char(255)," .
-            "count integer" .
+            "count integer DEFAULT 0 " .
             ");");
         $this->connection->exec("ALTER TABLE surveys ADD CONSTRAINT FK_users_nickname 
                                               FOREIGN KEY (owner) REFERENCES nickname.users;" .
@@ -258,24 +269,28 @@ class Database
     {
         /* TODO START */
 
-        $Survey = array();
+        $result = $this->connection->prepare("SELECT * FROM surveys WHERE owner = :nickanme");
+        $result ->bindParam(':nickanme', $owner);
+        $result->execute();
 
-        $getQs_rep = $this->connection->prepare("SELECT surveys.owner, surveys.question, surveys.id, responses.title FROM surveys 
-            INNER JOIN responses ON responses.id_survey = surveys.id WHERE surveys.owner = :nickname");
-        $getQs_rep->bindParam(':nickname', $owner);
-        $getQs_rep->execute();
-        $getQs_rep = $getQs_rep->fetchAll();
+        $sondages = [];
 
-        for ($i = 0; $i < sizeof($getQs_rep) ; $i++) {
-            for ($j = 0; $j <sizeof($getQs_rep[$i])/2 ;  $j++ ) {
-                array_push($Survey, $getQs_rep[$i][$j]);
+        if ($result->rowCount() == 0) return $sondages;
+        else {
+            foreach ($result as $row) {
+                $resultatQuestion = $this->connection->prepare("SELECT * FROM responses WHERE id_survey = :id_survey");
+                $resultatQuestion -> bindParam(':id_survey', $row["id"]);
+                $resultatQuestion -> execute();
+//                var_dump($row);
+
+                $survey = new Survey($row["owner"], $row["question"]);
+                $survey->setId($row["id"]);
+                $survey->setResponses($this->loadResponses($survey, $resultatQuestion->fetchAll()));
+
+                $sondages[] = $survey;
             }
+            return $sondages;
         }
-        return $Survey;
-
-//        $bool = (sizeof($questionSurvey) >= 1 ) ?  true : false;
-//        if ($bool) return $questionSurvey;
-//        else return false;
         /* TODO END */
     }
 
@@ -301,7 +316,33 @@ class Database
      */
     public function vote($id)
     {
+//        UPDATE responses SET count = count + 1 WHERE id = 9
         /* TODO START */
+
+
+        $valueVoteIncremente = $this->connection->prepare("SELECT * from responses WHERE id = :id");
+        $valueVoteIncremente -> bindParam(':id', $id);
+        $valueVoteIncremente -> execute();
+
+        foreach ($valueVoteIncremente as $item) {
+            $idSurvey = $item["id_survey"];
+            $valueVoteIncremente = $item["count"] + 1;
+        }
+
+        $totalDesVotePourUnSondage = $this->connection->prepare("SELECT SUM(count) FROM responses WHERE id_survey = :id_Survey");
+        $totalDesVotePourUnSondage -> bindParam(':id_Survey' , $idSurvey);
+        $totalDesVotePourUnSondage -> execute();
+        $totalDesVotePourUnSondage = $totalDesVotePourUnSondage->fetch(PDO::FETCH_ASSOC)['SUM(count)'] +1;
+
+
+
+        $bdd = $this->connection->prepare("UPDATE responses SET count = ".$valueVoteIncremente." WHERE id = :id");
+        $bdd -> bindParam(':id', $id);
+
+        $bool = ($bdd -> execute() === true) ? true : false;
+
+        return $bool;
+
         /* TODO END */
     }
 
@@ -330,9 +371,19 @@ class Database
      */
     private function loadResponses($survey, $arrayResponses)
     {
+
         $responses = array();
         /* TODO START */
+        foreach ($arrayResponses as $keyPDO)
+        {
+//            var_dump($keyPDO);
+            $rep = new Response($survey, $keyPDO["title"], $keyPDO["count"]);
+            $rep -> setId($keyPDO["id"]);
+            $responses [] = $rep;
+
+        }
         /* TODO END */
+//        var_dump($responses);
         return $responses;
     }
 

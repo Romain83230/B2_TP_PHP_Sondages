@@ -23,11 +23,8 @@ class SurveysView extends View
                     </div>';
             return;
         }else {
-            var_dump($this->surveys);
-//            require("templates/surveys.inc.php");
+            require("templates/surveys.inc.php");
         }
-
-
     }
 
     /**

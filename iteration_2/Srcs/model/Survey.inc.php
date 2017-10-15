@@ -29,7 +29,7 @@ class Survey {
 		return $this->question;
 	}
 
-	public function &getResponses() {
+	public function getResponses() {
 		return $this->responses;
 	}
 
@@ -43,7 +43,9 @@ class Survey {
 	
 	public function computePercentages() {
 		/* TODO START */
-			var_dump("coucou");
+
+
+
 		/* TODO END */
 	}
 

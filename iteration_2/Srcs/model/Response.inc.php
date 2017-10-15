@@ -21,8 +21,7 @@ class Response {
 	public function computePercentage($total) {
 		/* TODO START */
 
-		var_dump($this->getSurvey());
-		var_dump($this->getTitle());
+
 
 		/* TODO END */
 	}
