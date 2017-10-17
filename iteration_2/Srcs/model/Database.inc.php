@@ -201,12 +201,21 @@ class Database
         if ($this->checkPasswordValidity($password) === false) {
             $result = "Le mot de passe doit contenir entre 3 et 10 caractères.";
         } else {
-            $result = true;
+
             $crypPsd = hash('sha1', $password);
-            $this->connection->exec("UPDATE users SET password = \"$crypPsd\" WHERE nickname = \"$nickname\"");
+            $ancienMDP = $this->connection->prepare("SELECT password FROM users WHERE nickname = :nickname ");
+            $ancienMDP -> bindParam('nickname', $nickname);
+            $ancienMDP -> execute();
+            $ancienMDP = $ancienMDP -> fetch(PDO::FETCH_ASSOC);
+
+
+            if ($crypPsd == $ancienMDP['password']) {
+                $result = "Votre ancien et nouveau mots de passe sont les mêmes. Veuillez en trouvez un autre.";
+            } else {
+                $this->connection->exec("UPDATE users SET password = \"$crypPsd\" WHERE nickname = \"$nickname\"");
+                $result = true;
+            }
         }
-
-
         return $result;
 
         /* TODO END */
@@ -226,7 +235,7 @@ class Database
 
 
         $question = trim ($survey[0]);
-        $postQuestion = $this->connection->exec("INSERT INTO surveys (question, owner)VALUES (\"$question\", \"$nickname\") ");
+        $postQuestion = $this->connection->exec("INSERT INTO surveys (question, owner) VALUES (\"$question\", \"$nickname\") ");
         $idSurvey = $this->connection->query("SELECT id FROM surveys WHERE question = \"$question\" ");
         $id = $idSurvey->fetch()['id'];
         if ($postQuestion) {

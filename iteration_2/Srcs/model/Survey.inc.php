@@ -44,7 +44,12 @@ class Survey {
 	public function computePercentages() {
 		/* TODO START */
 
+        $total = 0;
+        foreach ($this->getResponses() as $respons) {
 
+            $total += $respons->getCount();
+		}
+		return $total;
 
 		/* TODO END */
 	}
