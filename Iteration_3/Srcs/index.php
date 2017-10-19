@@ -1,4 +1,6 @@
 <?php
+var_dump("A ENLEVER");
+var_dump("A ENLEVER");
 
 session_start();
 

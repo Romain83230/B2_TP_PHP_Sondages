@@ -50,9 +50,8 @@ class AddSurveyAction extends Action
                     $this->getView()->setMessage("Il faut saisir au moins 2 réponses.");
                 } else {
                     array_unshift($reponse, htmlentities($_POST['questionSurvey']));
-                    $envoiQuestion = $this->database->saveSurvey($reponse, $this->getSessionLogin());
 
-                    if ($envoiQuestion === true) {
+                    if (($this->database->saveSurvey($reponse, $this->getSessionLogin())) === true) {
                         $this->setView(getViewByName("Message"));
                         $this->getView()->setMessage("Merci, nous avons ajouté votre sondage");
                     }

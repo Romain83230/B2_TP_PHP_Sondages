@@ -1,5 +1,5 @@
 <?php
-var_dump("A ENLEVER");
+
 
 session_start();
 

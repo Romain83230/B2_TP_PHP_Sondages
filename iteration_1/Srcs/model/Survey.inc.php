@@ -29,7 +29,7 @@ class Survey {
 		return $this->question;
 	}
 
-	public function &getResponses() {
+	public function getResponses() {
 		return $this->responses;
 	}
 
