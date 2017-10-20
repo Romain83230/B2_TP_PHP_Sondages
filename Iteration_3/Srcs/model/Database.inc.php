@@ -366,6 +366,28 @@ class Database
     {
         $surveys = array();
         /* TODO START */
+
+        $result = $this->connection->prepare("SELECT * FROM surveys");
+        $result ->bindParam(':nickanme', $owner);
+        $result->execute();
+
+        if ($result->rowCount() == 0) return $surveys;
+        else {
+            foreach ($result as $row) {
+                $resultatQuestion = $this->connection->prepare("SELECT * FROM responses WHERE id_survey = :id_survey");
+                $resultatQuestion -> bindParam(':id_survey', $row["id"]);
+                $resultatQuestion -> execute();
+//                var_dump($row);
+
+                $survey = new Survey($row["owner"], $row["question"]);
+                $survey->setId($row["id"]);
+                $survey->setResponses($this->loadResponses($survey, $resultatQuestion->fetchAll()));
+
+                $surveys[] = $survey;
+            }
+
+        }
+
         /* TODO END */
         return $surveys;
     }
