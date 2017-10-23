@@ -274,12 +274,13 @@ class Database
      * @param string $owner Pseudonyme de l'utilisateur.
      * @return array(Survey)|boolean Sondages trouvés par la fonction ou false si une erreur s'est produite.
      */
-    public function loadSurveysByOwner($owner)
+    public function loadSurveysByOwner($owner, $id = "")
     {
         /* TODO START */
 
-        $result = $this->connection->prepare("SELECT * FROM surveys WHERE owner = :nickanme");
+        $result = $this->connection->prepare("SELECT * FROM surveys WHERE owner = :nickanme AND id = :id");
         $result ->bindParam(':nickanme', $owner);
+        $result ->bindParam(':id', $id);
         $result->execute();
 
         $sondages = [];
@@ -417,6 +418,26 @@ class Database
 //        var_dump($responses);
         return $responses;
     }
+
+
+    public function deleteSondage($nickname, $idSondage) {
+        $bddSurvey = $this->connection->prepare("DELETE FROM surveys WHERE id = :id AND owner = :nickname");
+        $bddSurvey -> bindParam(':id', $idSondage );
+        $bddSurvey -> bindParam(':nickname', $nickname );
+
+        $bddResponse = $this->connection->prepare("DELETE FROM responses WHERE id_survey = :id");
+        $bddResponse -> bindParam(':id', $idSondage );
+
+        return $bool = ($bddSurvey -> execute() == true) && ($bddResponse -> execute() == true) ? true : false ;
+
+    }
+
+    public function modiferSondage($nickname, $id) {
+
+
+
+    }
+
 
 }
 

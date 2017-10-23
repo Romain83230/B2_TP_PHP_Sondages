@@ -1,6 +1,6 @@
 <?php
-var_dump("A ENLEVER");
-var_dump("A ENLEVER");
+var_dump("");
+
 
 session_start();
 
@@ -32,7 +32,8 @@ function getAction() {
 			'AddSurvey',
 			'GetMySurveys',
 			'Search',
-			'Vote'
+			'Vote',
+            'UpdateSondage'
 	);
 
 	if (!in_array($action, $actions)) $action = 'Default';

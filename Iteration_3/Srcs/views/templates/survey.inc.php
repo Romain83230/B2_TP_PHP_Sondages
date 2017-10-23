@@ -1,5 +1,15 @@
 <li class="media well">
     <div class="media-body">
+
+
+        <form class=".span1." method="post" action="<?php echo $_SERVER['PHP_SELF'] . '?action=UpdateSondage'; ?>">
+            <button class="btn btn-default" name="Delete" value="<?php echo $survey -> getId()?>" type="submit">
+                <i class="glyphicon glyphicon-trash"></i>
+            </button>
+            <button class="btn btn-default" name="Modifier"  value="<?php echo $survey -> getId()?>" type="submit">
+                <i class="glyphicon glyphicon-trash"></i>
+            </button>
+        </form>
         <h4 class="media-heading"><?php echo $survey->getQuestion() ?></h4>
         <br>
         <?php
@@ -10,11 +20,11 @@
         echo '<div class="fluid-row">
                     <div class="span2">' . $response->getTitle() . '</div>
                     <div class="span2 progress progress-striped active">
-            <div class="bar" style="width: '.$response->getPercentage().'%"></div>
+            <div class="bar" style="width: ' . $response->getPercentage() . '%"></div>
             </div>
-            <span class="span1">('.round($response->getPercentage()).'%)</span>'
+            <span class="span1">(' . round($response->getPercentage()) . '%)</span>'
         ?>
-        <form class=".span1." method="post" action="<?php echo $_SERVER['PHP_SELF'].'?action=Vote';?>">
+        <form class=".span1." method="post" action="<?php echo $_SERVER['PHP_SELF'] . '?action=Vote'; ?>">
             <input type="hidden" name="responseId" value="<?php echo $response->getID() ?>">
             <input type="submit" style="margin-left:5px" class="span1 btn btn-small btn-danger" value="Voter">
         </form>
