@@ -3,10 +3,10 @@
 
 
         <form class=".span1." method="post" action="<?php echo $_SERVER['PHP_SELF'] . '?action=UpdateSondage'; ?>">
-            <button class="btn btn-default" name="Delete" value="<?php echo $survey -> getId()?>" type="submit">
+            <button class="fa fa-trash-o" name="Delete" value="<?php echo $survey -> getId()?>" type="submit">
                 <i class="glyphicon glyphicon-trash"></i>
             </button>
-            <button class="btn btn-default" name="Modifier"  value="<?php echo $survey -> getId()?>" type="submit">
+            <button class="fa fa-modify-o" name="Modifier"  value="<?php echo $survey -> getId()?>" type="submit">
                 <i class="glyphicon glyphicon-trash"></i>
             </button>
         </form>

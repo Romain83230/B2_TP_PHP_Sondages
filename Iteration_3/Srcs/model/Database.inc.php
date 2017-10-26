@@ -233,7 +233,6 @@ class Database
     {
         /* TODO START */
 
-
         $question = trim ($survey[0]);
         $postQuestion = $this->connection->exec("INSERT INTO surveys (question, owner) VALUES (\"$question\", \"$nickname\") ");
         $idSurvey = $this->connection->query("SELECT id FROM surveys WHERE question = \"$question\" ");
@@ -274,13 +273,12 @@ class Database
      * @param string $owner Pseudonyme de l'utilisateur.
      * @return array(Survey)|boolean Sondages trouvés par la fonction ou false si une erreur s'est produite.
      */
-    public function loadSurveysByOwner($owner, $id = "")
+    public function loadSurveysByOwner($owner)
     {
         /* TODO START */
 
-        $result = $this->connection->prepare("SELECT * FROM surveys WHERE owner = :nickanme AND id = :id");
+        $result = $this->connection->prepare("SELECT * FROM surveys WHERE owner = :nickanme");
         $result ->bindParam(':nickanme', $owner);
-        $result ->bindParam(':id', $id);
         $result->execute();
 
         $sondages = [];
@@ -291,7 +289,6 @@ class Database
                 $resultatQuestion = $this->connection->prepare("SELECT * FROM responses WHERE id_survey = :id_survey");
                 $resultatQuestion -> bindParam(':id_survey', $row["id"]);
                 $resultatQuestion -> execute();
-//                var_dump($row);
 
                 $survey = new Survey($row["owner"], $row["question"]);
                 $survey->setId($row["id"]);
