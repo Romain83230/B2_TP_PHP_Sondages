@@ -1,11 +1,6 @@
 <?php
-<<<<<<< HEAD
 var_dump("");
 
-=======
-var_dump("A ENLEVER");
-var_dump("A ENLEVER");
->>>>>>> 93fcf948cd2096c1fa0032fd24d67e1322355849
 
 session_start();
 
@@ -38,11 +33,7 @@ function getAction() {
 			'GetMySurveys',
 			'Search',
 			'Vote',
-<<<<<<< HEAD
             'UpdateSondage'
-=======
-			'SupprimerSondage'
->>>>>>> 93fcf948cd2096c1fa0032fd24d67e1322355849
 	);
 
 	if (!in_array($action, $actions)) $action = 'Default';
@@ -56,3 +47,4 @@ $view = $action->getView();
 $action->getView()->setLogin($action->getSessionLogin());
 $view->run();
 ?>
+
