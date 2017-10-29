@@ -1,6 +1,6 @@
 <?php
-var_dump("A ENLEVER");
-var_dump("A ENLEVER");
+var_dump("");
+
 
 session_start();
 
@@ -33,7 +33,7 @@ function getAction() {
 			'GetMySurveys',
 			'Search',
 			'Vote',
-			'SupprimerSondage'
+            'UpdateSondage'
 	);
 
 	if (!in_array($action, $actions)) $action = 'Default';
@@ -47,3 +47,4 @@ $view = $action->getView();
 $action->getView()->setLogin($action->getSessionLogin());
 $view->run();
 ?>
+

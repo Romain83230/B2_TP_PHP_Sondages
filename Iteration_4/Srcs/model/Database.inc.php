@@ -233,7 +233,6 @@ class Database
     {
         /* TODO START */
 
-
         $question = trim ($survey[0]);
         $postQuestion = $this->connection->exec("INSERT INTO surveys (question, owner) VALUES (\"$question\", \"$nickname\") ");
         $idSurvey = $this->connection->query("SELECT id FROM surveys WHERE question = \"$question\" ");
@@ -290,7 +289,6 @@ class Database
                 $resultatQuestion = $this->connection->prepare("SELECT * FROM responses WHERE id_survey = :id_survey");
                 $resultatQuestion -> bindParam(':id_survey', $row["id"]);
                 $resultatQuestion -> execute();
-//                var_dump($row);
 
                 $survey = new Survey($row["owner"], $row["question"]);
                 $survey->setId($row["id"]);
@@ -417,6 +415,26 @@ class Database
 //        var_dump($responses);
         return $responses;
     }
+
+
+    public function deleteSondage($nickname, $idSondage) {
+        $bddSurvey = $this->connection->prepare("DELETE FROM surveys WHERE id = :id AND owner = :nickname");
+        $bddSurvey -> bindParam(':id', $idSondage );
+        $bddSurvey -> bindParam(':nickname', $nickname );
+
+        $bddResponse = $this->connection->prepare("DELETE FROM responses WHERE id_survey = :id");
+        $bddResponse -> bindParam(':id', $idSondage );
+
+        return $bool = ($bddSurvey -> execute() == true) && ($bddResponse -> execute() == true) ? true : false ;
+
+    }
+
+    public function modiferSondage($nickname, $id) {
+
+
+
+    }
+
 
 }
 
