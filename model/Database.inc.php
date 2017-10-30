@@ -72,7 +72,7 @@ class Database
                                               FOREIGN KEY (owner) REFERENCES nickname.users;" .
             "ALTER TABLE responses ADD CONSTRAINT FK_ID_SURVEY
                                               FOREIGN KEY (id_survey) REFERENCES surveys(id);".
-            "ALTER TABLE comments ADD CONSTRAINT FK_nickame_writer FOREIGN KEY (writer) REFERENCES users(nickname);".
+            "ALTER TABLE comments ADD CONSTRAINT FK_nickname_writer FOREIGN KEY (writer) REFERENCES users(nickname);".
             "ALTER TABLE comments ADD CONSTRAINT FK_idsurvey_id FOREIGN KEY (id_survey) REFERENCES surveys(id);"
           );
     }
@@ -287,8 +287,8 @@ class Database
     {
         /* TODO START */
 
-        $result = $this->connection->prepare("SELECT * FROM surveys WHERE owner = :nickanme");
-        $result ->bindParam(':nickanme', $owner);
+        $result = $this->connection->prepare("SELECT * FROM surveys WHERE owner = :nickname");
+        $result ->bindParam(':nickname', $owner);
         $result->execute();
 
         $sondages = [];
@@ -377,7 +377,7 @@ class Database
         /* TODO START */
 
         $result = $this->connection->prepare("SELECT * FROM surveys");
-        $result ->bindParam(':nickanme', $owner);
+        $result ->bindParam(':nickname', $owner);
         $result->execute();
 
         if ($result->rowCount() == 0) return $surveys;
@@ -427,6 +427,41 @@ class Database
         return $responses;
     }
 
+    private function loadComments($survey, $arrayComments){
+
+      $Comms = array();
+
+      foreach ($arrayComments as $key){
+        $com = new Comments ($key['writer'], $survey);
+        $com->setId($key["id"]);
+        $Comms [] = $com;
+      }
+    }
+
+    public function loadCommentsBySurvey($survey)
+    {
+        /* TODO START */
+
+        $result = $this->connection->prepare("SELECT * FROM comments WHERE survey = :id_survey ");
+        $result ->bindParam(':id_survey', $survey);
+        $result->execute();
+
+        $commentaires = [];
+
+        if ($result->rowCount() == 0) return $commentaires;
+        else {
+            foreach ($result as $row) {
+
+                $comment = new Comments($row["writer"], $row["survey"]);
+                $comment->setId($row["id"]);
+                $comment->setComment($this->loadComments($survey, $result->fetchAll()));
+
+                $commentaires[] = $comment;
+            }
+            return $commentaires;
+        }
+        /* TODO END */
+    }
 }
 
 ?>

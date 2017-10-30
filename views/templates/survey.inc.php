@@ -1,6 +1,6 @@
 <li class="media well">
     <div class="media-body">
-        <h4 class="media-heading"><?php echo $survey->getQuestion() ?></h4>
+        <h4 class="media-heading"><a href="<?php echo $_SERVER['PHP_SELF'].'?action=GetSurveyComments'; ?>"><?php echo $survey->getQuestion() ?></a></h4>
         <br>
         <?php
         foreach ($survey->getResponses() as $response) {
@@ -27,6 +27,3 @@
 
     </div>
 </li>
-
-
-
