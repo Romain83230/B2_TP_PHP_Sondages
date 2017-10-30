@@ -10,7 +10,9 @@ class DefaultAction extends Action {
 	 * @see Action::run()
 	 */
 	public function run() {
-		$this->setView(getViewByName("Default"));
+        $this->setView(getViewByName("Default"));
+        $this->getView()->setSurveys($this->database->loadOneSurvey($this->getSessionLogin(), 1));
+
 	}
 
 }
