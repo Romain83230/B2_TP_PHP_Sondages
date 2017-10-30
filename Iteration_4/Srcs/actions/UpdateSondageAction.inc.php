@@ -28,6 +28,7 @@ class UpdateSondageAction extends Action
 
         } elseif (isset($_POST['Modifier'])) {
             $statueSondage = $_POST['Modifier'];
+            var_dump($statueSondage);
 
             $this->setView(getViewByName("EditSurvey"));
             $this->getView()->setSurveys($this->database->loadOneSurvey($this->getSessionLogin(), $statueSondage));

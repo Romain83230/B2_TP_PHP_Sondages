@@ -24,7 +24,7 @@ class Database
             $dbh->exec("CREATE DATABASE IF NOT EXISTS `$dbBd` ;")
             or die(print_r($dbh->errorInfo(), true));
         } catch (PDOException $e) {
-            die("Probleme au niveau de la base de donnee : ". $e->getMessage());
+            die("Probleme au niveau de la base de donnee : " . $e->getMessage());
         }
 
         $url = 'mysql:host=' . $dbHost . ';dbname=' . $dbBd;
@@ -49,18 +49,18 @@ class Database
     private function createDataBase()
     {
         $this->connection->exec(
-        "CREATE TABLE IF NOT EXISTS users (" .
-            " nickname char(20)," .
-            " password char(50)" .
+            "CREATE TABLE IF NOT EXISTS users (" .
+            " nickname CHAR(20)," .
+            " password CHAR(50)" .
             ");" . "CREATE TABLE IF NOT EXISTS surveys (" .
-            " id int NOT NULL AUTO_INCREMENT PRIMARY KEY ,	" .
-            " owner char(20)," .
-            " question char(250)" .
+            " id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,	" .
+            " owner CHAR(20)," .
+            " question CHAR(250)" .
             ");" . "CREATE TABLE IF NOT EXISTS responses (" .
-            " id int NOT NULL AUTO_INCREMENT PRIMARY KEY ,	" .
-            " id_survey integer," .
-            " title char(255)," .
-            "count integer DEFAULT 0 " .
+            " id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,	" .
+            " id_survey INTEGER," .
+            " title CHAR(255)," .
+            "count INTEGER DEFAULT 0 " .
             ");");
         $this->connection->exec("ALTER TABLE surveys ADD CONSTRAINT FK_users_nickname 
                                               FOREIGN KEY (owner) REFERENCES nickname.users;" .
@@ -204,9 +204,9 @@ class Database
 
             $crypPsd = hash('sha1', $password);
             $ancienMDP = $this->connection->prepare("SELECT password FROM users WHERE nickname = :nickname ");
-            $ancienMDP -> bindParam('nickname', $nickname);
-            $ancienMDP -> execute();
-            $ancienMDP = $ancienMDP -> fetch(PDO::FETCH_ASSOC);
+            $ancienMDP->bindParam('nickname', $nickname);
+            $ancienMDP->execute();
+            $ancienMDP = $ancienMDP->fetch(PDO::FETCH_ASSOC);
 
 
             if ($crypPsd == $ancienMDP['password']) {
@@ -233,13 +233,13 @@ class Database
     {
         /* TODO START */
 
-        $question = trim ($survey[0]);
+        $question = trim($survey[0]);
         $postQuestion = $this->connection->exec("INSERT INTO surveys (question, owner) VALUES (\"$question\", \"$nickname\") ");
         $idSurvey = $this->connection->query("SELECT id FROM surveys WHERE question = \"$question\" ");
         $id = $idSurvey->fetch()['id'];
         if ($postQuestion) {
             for ($i = 1; $i <= sizeof($survey) - 1; $i++) {
-                $this->saveResponse(($survey[$i]),$id);
+                $this->saveResponse(($survey[$i]), $id);
             }
             return true;
         } else return false;
@@ -278,7 +278,7 @@ class Database
         /* TODO START */
 
         $result = $this->connection->prepare("SELECT * FROM surveys WHERE owner = :nickanme");
-        $result ->bindParam(':nickanme', $owner);
+        $result->bindParam(':nickanme', $owner);
         $result->execute();
 
         $sondages = [];
@@ -287,8 +287,8 @@ class Database
         else {
             foreach ($result as $row) {
                 $resultatQuestion = $this->connection->prepare("SELECT * FROM responses WHERE id_survey = :id_survey");
-                $resultatQuestion -> bindParam(':id_survey', $row["id"]);
-                $resultatQuestion -> execute();
+                $resultatQuestion->bindParam(':id_survey', $row["id"]);
+                $resultatQuestion->execute();
 
                 $survey = new Survey($row["owner"], $row["question"]);
                 $survey->setId($row["id"]);
@@ -301,13 +301,12 @@ class Database
         /* TODO END */
     }
 
-    public function loadOneSurvey($owner, $question)
+    public function loadOneSurvey($owner, $idSurvey)
     {
         /* TODO START */
 
-        $result = $this->connection->prepare("SELECT * FROM surveys WHERE owner = :nickanme AND question = :question");
-        $result ->bindParam(':nickanme', $owner);
-        $result ->bindParam(':question', $question);
+        $result = $this->connection->prepare("SELECT * FROM surveys WHERE id = :id");
+        $result->bindParam(':id', $idSurvey);
         $result->execute();
 
         $sondages = [];
@@ -316,8 +315,8 @@ class Database
         else {
             foreach ($result as $row) {
                 $resultatQuestion = $this->connection->prepare("SELECT * FROM responses WHERE id_survey = :id_survey");
-                $resultatQuestion -> bindParam(':id_survey', $row["id"]);;
-                $resultatQuestion -> execute();
+                $resultatQuestion->bindParam(':id_survey', $row["id"]);;
+                $resultatQuestion->execute();
 
                 $survey = new Survey($row["owner"], $row["question"]);
                 $survey->setId($row["id"]);
@@ -325,6 +324,7 @@ class Database
 
                 $sondages[] = $survey;
             }
+
             return $sondages;
         }
         /* TODO END */
@@ -356,9 +356,9 @@ class Database
         /* TODO START */
 
 
-        $valueVoteIncremente = $this->connection->prepare("SELECT * from responses WHERE id = :id");
-        $valueVoteIncremente -> bindParam(':id', $id);
-        $valueVoteIncremente -> execute();
+        $valueVoteIncremente = $this->connection->prepare("SELECT * FROM responses WHERE id = :id");
+        $valueVoteIncremente->bindParam(':id', $id);
+        $valueVoteIncremente->execute();
 
         foreach ($valueVoteIncremente as $item) {
             $idSurvey = $item["id_survey"];
@@ -366,16 +366,15 @@ class Database
         }
 
         $totalDesVotePourUnSondage = $this->connection->prepare("SELECT SUM(count) FROM responses WHERE id_survey = :id_Survey");
-        $totalDesVotePourUnSondage -> bindParam(':id_Survey' , $idSurvey);
-        $totalDesVotePourUnSondage -> execute();
-        $totalDesVotePourUnSondage = $totalDesVotePourUnSondage->fetch(PDO::FETCH_ASSOC)['SUM(count)'] +1;
+        $totalDesVotePourUnSondage->bindParam(':id_Survey', $idSurvey);
+        $totalDesVotePourUnSondage->execute();
+        $totalDesVotePourUnSondage = $totalDesVotePourUnSondage->fetch(PDO::FETCH_ASSOC)['SUM(count)'] + 1;
 
 
+        $bdd = $this->connection->prepare("UPDATE responses SET count = " . $valueVoteIncremente . " WHERE id = :id");
+        $bdd->bindParam(':id', $id);
 
-        $bdd = $this->connection->prepare("UPDATE responses SET count = ".$valueVoteIncremente." WHERE id = :id");
-        $bdd -> bindParam(':id', $id);
-
-        $bool = ($bdd -> execute() === true) ? true : false;
+        $bool = ($bdd->execute() === true) ? true : false;
 
         return $bool;
 
@@ -395,15 +394,15 @@ class Database
         /* TODO START */
 
         $result = $this->connection->prepare("SELECT * FROM surveys");
-        $result ->bindParam(':nickanme', $owner);
+        $result->bindParam(':nickanme', $owner);
         $result->execute();
 
         if ($result->rowCount() == 0) return $surveys;
         else {
             foreach ($result as $row) {
                 $resultatQuestion = $this->connection->prepare("SELECT * FROM responses WHERE id_survey = :id_survey");
-                $resultatQuestion -> bindParam(':id_survey', $row["id"]);
-                $resultatQuestion -> execute();
+                $resultatQuestion->bindParam(':id_survey', $row["id"]);
+                $resultatQuestion->execute();
 //                var_dump($row);
 
                 $survey = new Survey($row["owner"], $row["question"]);
@@ -432,11 +431,10 @@ class Database
 
         $responses = array();
         /* TODO START */
-        foreach ($arrayResponses as $keyPDO)
-        {
+        foreach ($arrayResponses as $keyPDO) {
 //            var_dump($keyPDO);
             $rep = new Response($survey, $keyPDO["title"], $keyPDO["count"]);
-            $rep -> setId($keyPDO["id"]);
+            $rep->setId($keyPDO["id"]);
             $responses [] = $rep;
 
         }
@@ -446,42 +444,44 @@ class Database
     }
 
 
-    public function deleteSondage($nickname, $idSondage) {
+    public function deleteSondage($nickname, $idSondage)
+    {
         $bddSurvey = $this->connection->prepare("DELETE FROM surveys WHERE id = :id AND owner = :nickname");
-        $bddSurvey -> bindParam(':id', $idSondage );
-        $bddSurvey -> bindParam(':nickname', $nickname );
+        $bddSurvey->bindParam(':id', $idSondage);
+        $bddSurvey->bindParam(':nickname', $nickname);
 
         $bddResponse = $this->connection->prepare("DELETE FROM responses WHERE id_survey = :id");
-        $bddResponse -> bindParam(':id', $idSondage );
+        $bddResponse->bindParam(':id', $idSondage);
 
-        return $bool = ($bddSurvey -> execute() == true) && ($bddResponse -> execute() == true) ? true : false ;
+        return $bool = ($bddSurvey->execute() == true) && ($bddResponse->execute() == true) ? true : false;
 
     }
 
-    public function modiferSondage($nickname, $rep) {
+    public function modiferSondage($rep, $idsurvey)
+    {
 
-        var_dump($rep[0]);
-        $ancienneQuestion = $this->connection -> prepare("SELECT * FROM surveys WHERE question = :question");
-        $ancienneQuestion -> bindParam(':question', $rep[0]);
-        $ancienneQuestion ->execute();
-        $AncienneQs = $ancienneQuestion -> fetchAll(PDO::FETCH_ASSOC);
+        $updateQsSondage = $this->connection->prepare("UPDATE surveys SET question = :qs WHERE id = :id ");
+        $updateQsSondage->bindParam(':qs', $rep[0]);
+        $updateQsSondage->bindParam(':id', $idsurvey);
+        $updateQsSondage->execute();
 
-var_dump($AncienneQs);
-        $qs =  $this->connection -> prepare("SELECT * FROM responses WHERE id_survey = :idSurvey");
-        $qs -> bindParam(':idSurvey', $AncienneQs["id"]);
-        $qs -> execute();
-        $AncienneResponses = $qs -> fetchAll(PDO::FETCH_ASSOC);
 
-        for ($i = 0; $i < sizeof($rep); $i++) {
+        $idReponse = $this->connection->prepare("SELECT id FROM responses WHERE id_survey = :idsurvey");
+        $idReponse->bindParam(':idsurvey', $idsurvey);
+        $idReponse->execute();
 
-            if ($AncienneQs['question'] == $rep[0]) {
-                return "les qs sont les memes";
-            } else {
-                return "elles ont changé";
-            }
+        $index = $idReponse->fetchAll(PDO::FETCH_ASSOC);
+
+        $max = sizeof($rep);
+        for ($i = 0; $i < $max; $i++) {
+            $updateResSondage = $this->connection->prepare("UPDATE responses SET title = :rep, count = 0 WHERE id = :id ");
+            $updateResSondage->bindParam(':id', $index[$i]['id']);
+            $updateResSondage->bindParam(':rep', $rep[$i + 1]);
+            $updateResSondage->execute();
 
         }
 
+        return true;
 
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+
+
 function generateInputForResponse($count, $question) {
 
     ?>
@@ -8,6 +10,7 @@ function generateInputForResponse($count, $question) {
         <label class="control-label" for="responseSurvey<?php echo $count ?>">Réponse <?php  ?></label>
         <div class="controls">
             <input class="span3" type="text" name="responseSurvey<?php echo $count ?>" value="<?php echo $question  ?>">
+
         </div>
     </div>
     <?php
@@ -27,8 +30,10 @@ function generateInputForResponse($count, $question) {
         </div>
         <div class="control-group">
             <label class="control-label" for="questionSurvey">Question</label>
-            <div class="controls">
+            <div class="controls" >
+                <input class="span3" value="<?php echo $survey -> getID() ?>" name="idSurvey" type="hidden">
                 <input class="span3" type="text" name="questionSurvey" value="<?php echo $survey -> getQuestion() ?>">
+
             </div>
         </div>
         <br>

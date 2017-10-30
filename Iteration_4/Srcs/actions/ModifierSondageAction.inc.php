@@ -22,6 +22,9 @@ class ModifierSondageAction extends Action
     public function run()
     {
 
+
+
+
         if ($this->getSessionLogin() === null) {
             $this->setView(getViewByName("Message"));
             $this->getView()->setMessage("Vous devez vous loger avant de poster un sondage");
@@ -43,11 +46,14 @@ class ModifierSondageAction extends Action
                 } else {
                     array_unshift($reponse, htmlentities($_POST['questionSurvey']));
 
-                    var_dump( $this->database -> modiferSondage($this->getSessionLogin(), $reponse));
-//                    if ($this->database -> modiferSondage($this->getSessionLogin(), $reponse) === true) {
-//                        $this->setView(getViewByName("Message"));
-//                        $this->getView()->setMessage("Merci, nous avons ajouté votre sondage");
-//                    }
+
+                    if ($this->database -> modiferSondage($reponse, $_POST['idSurvey']) === true) {
+                        $this->setView(getViewByName("Message"));
+                        $this->getView()->setMessage("Merci, nous avons ajouté votre sondage");
+                    } else {
+                        $this->setView(getViewByName("Message"));
+                        $this->getView()->setMessage("Un problème est survenu lors de la modification de votre sondage");
+                    }
 
                 }
             }
