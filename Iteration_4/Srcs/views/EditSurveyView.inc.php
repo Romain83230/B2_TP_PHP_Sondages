@@ -6,7 +6,19 @@ class EditSurveyView extends View {
     private $surveys;
 
     public function displayBody() {
-        require("templates/editSurvey.inc.php");
+        if (count($this->surveys) === 0) {
+            echo '<div class="container">
+                    <br><br><br>
+                           <div style="text-align:center" class="alert">
+                                Un problème est survenu lors du chargement de votre sondage à modifier.
+                           </div>
+                    </div>';
+            return;
+        }else {
+
+            require("templates/updateSondages.inc.php");
+        }
+
     }
 
 

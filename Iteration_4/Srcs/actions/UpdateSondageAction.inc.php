@@ -29,8 +29,9 @@ class UpdateSondageAction extends Action
         } elseif (isset($_POST['Modifier'])) {
             $statueSondage = $_POST['Modifier'];
 
-            $this->getView()->setSurveys($this->database->loadSurveysByOwner($pseudo));
             $this->setView(getViewByName("EditSurvey"));
+            $this->getView()->setSurveys($this->database->loadOneSurvey($this->getSessionLogin(), $statueSondage));
+
 
         } else {
             $statueSondage = false;

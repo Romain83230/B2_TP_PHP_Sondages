@@ -3,13 +3,12 @@
 
 
         <form class=".span1." method="post" action="<?php echo $_SERVER['PHP_SELF'] . '?action=UpdateSondage'; ?>">
-            <button class="fa fa-trash-o" name="Delete" value="<?php echo $survey -> getId()?>" type="submit">
-                <i class="glyphicon glyphicon-trash"></i>
+            <button class="fa fa-trash-o" name="Delete"  value="<?php echo $survey -> getId()?>" type="submit">
             </button>
-            <button class="fa fa-modify-o" name="Modifier"  value="<?php echo $survey -> getId()?>" type="submit">
-                <i class="glyphicon glyphicon-trash"></i>
+            <button class="fa fa-pencil-square-o" name="Modifier"  value="<?php echo $survey -> getQuestion()?>" type="submit">
             </button>
         </form>
+
         <h4 class="media-heading"><?php echo $survey->getQuestion() ?></h4>
         <br>
         <?php

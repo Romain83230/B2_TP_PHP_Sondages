@@ -33,7 +33,8 @@ function getAction() {
 			'GetMySurveys',
 			'Search',
 			'Vote',
-            'UpdateSondage'
+            'UpdateSondage',
+            'ModifierSondage'
 	);
 
 	if (!in_array($action, $actions)) $action = 'Default';

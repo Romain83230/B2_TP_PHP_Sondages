@@ -301,6 +301,35 @@ class Database
         /* TODO END */
     }
 
+    public function loadOneSurvey($owner, $question)
+    {
+        /* TODO START */
+
+        $result = $this->connection->prepare("SELECT * FROM surveys WHERE owner = :nickanme AND question = :question");
+        $result ->bindParam(':nickanme', $owner);
+        $result ->bindParam(':question', $question);
+        $result->execute();
+
+        $sondages = [];
+
+        if ($result->rowCount() == 0) return $sondages;
+        else {
+            foreach ($result as $row) {
+                $resultatQuestion = $this->connection->prepare("SELECT * FROM responses WHERE id_survey = :id_survey");
+                $resultatQuestion -> bindParam(':id_survey', $row["id"]);;
+                $resultatQuestion -> execute();
+
+                $survey = new Survey($row["owner"], $row["question"]);
+                $survey->setId($row["id"]);
+                $survey->setResponses($this->loadResponses($survey, $resultatQuestion->fetchAll()));
+
+                $sondages[] = $survey;
+            }
+            return $sondages;
+        }
+        /* TODO END */
+    }
+
     /**
      * Charge l'ensemble des sondages dont la question contient un mot clé.
      *
@@ -429,8 +458,29 @@ class Database
 
     }
 
-    public function modiferSondage($nickname, $id) {
+    public function modiferSondage($nickname, $rep) {
 
+        var_dump($rep[0]);
+        $ancienneQuestion = $this->connection -> prepare("SELECT * FROM surveys WHERE question = :question");
+        $ancienneQuestion -> bindParam(':question', $rep[0]);
+        $ancienneQuestion ->execute();
+        $AncienneQs = $ancienneQuestion -> fetchAll(PDO::FETCH_ASSOC);
+
+var_dump($AncienneQs);
+        $qs =  $this->connection -> prepare("SELECT * FROM responses WHERE id_survey = :idSurvey");
+        $qs -> bindParam(':idSurvey', $AncienneQs["id"]);
+        $qs -> execute();
+        $AncienneResponses = $qs -> fetchAll(PDO::FETCH_ASSOC);
+
+        for ($i = 0; $i < sizeof($rep); $i++) {
+
+            if ($AncienneQs['question'] == $rep[0]) {
+                return "les qs sont les memes";
+            } else {
+                return "elles ont changé";
+            }
+
+        }
 
 
     }
