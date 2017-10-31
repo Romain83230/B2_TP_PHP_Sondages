@@ -13,6 +13,5 @@ class DefaultAction extends Action {
         $this->setView(getViewByName("Default"));
         $this->getView()->setSurveys($this->database->loadSurveys());
 	}
-
 }
 ?>

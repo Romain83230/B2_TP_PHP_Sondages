@@ -5,6 +5,7 @@
 	<div class="form-horizontal modal-body">
 <?php	if ($this->message!=="")
 			echo '<div class="alert "'.$this->style.'">'.$this->message.'</div>';
+
 ?>
 		<div class="control-group">
 			<label class="control-label" for="signUpLogin">Pseudo</label>
@@ -26,6 +27,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
+        <?php require "Facebook/login.php" ?>
 		<input class="btn btn-danger" type="submit" value="Créer mon compte" />
 	</div>
 </form>

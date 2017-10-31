@@ -14,6 +14,7 @@ class LogoutAction extends Action {
 	public function run() {
 		$this->setSessionLogin(null);
 		$this->setView(getViewByName("Default"));
+        $this->getView()->setSurveys($this->database->loadSurveys());
 	}
 
 }
