@@ -16,6 +16,29 @@ class SearchAction extends Action {
 	 */
 	public function run() {
 		/* TODO START */
+
+
+        $pseudo = $this->getSessionLogin();
+
+        if ($pseudo == null ) {
+            $this->setView(getViewByName("Message"));
+            $this->getView()->setMessage("Veuillez-vous connecter");
+        } else {
+
+        	if (isset($_POST['keyword'])) {
+        		$word = $_POST['keyword'];
+                $this->setView(getViewByName("Surveys"));
+                $this->getView()->setSurveys($this->database->loadSurveysByKeyword($word));
+
+			} else {
+                $this->setView(getViewByName("Message"));
+                $this->getView()->setMessage("Veuillez indiquer un terme à rechercher");
+			}
+
+
+        }
+
+
 		/* TODO END */
 	}
 

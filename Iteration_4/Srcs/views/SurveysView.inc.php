@@ -18,6 +18,8 @@ class SurveysView extends View
             echo '<div class="container">
                     <br><br><br>
                            <div style="text-align:center" class="alert">
+                           
+                           
                                 Aucun sondage ne correspond à votre demande.
                            </div>
                     </div>';

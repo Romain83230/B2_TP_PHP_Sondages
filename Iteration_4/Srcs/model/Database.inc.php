@@ -337,9 +337,34 @@ class Database
      * @return array(Survey)|boolean Sondages trouvés par la fonction ou false si une erreur s'est produite.
      */
 
+
     public function loadSurveysByKeyword($keyword)
     {
         /* TODO START */
+
+        $recherche = $this->connection -> prepare("SELECT * FROM surveys WHERE question LIKE :word");
+        $recherche -> bindParam(':word', $keyword);
+        $recherche -> execute();
+        $sondages = [];
+
+        if ($recherche->rowCount() == 0) return $sondages;
+        else {
+            foreach ($recherche as $row) {
+                $resultatQuestion = $this->connection->prepare("SELECT * FROM responses WHERE id_survey = :id_survey");
+                $resultatQuestion->bindParam(':id_survey', $row["id"]);;
+                $resultatQuestion->execute();
+
+                $survey = new Survey($row["owner"], $row["question"]);
+                $survey->setId($row["id"]);
+                $survey->setResponses($this->loadResponses($survey, $resultatQuestion->fetchAll()));
+
+                $sondages[] = $survey;
+            }
+
+            return $sondages;
+        }
+
+
         /* TODO END */
     }
 
@@ -364,12 +389,6 @@ class Database
             $idSurvey = $item["id_survey"];
             $valueVoteIncremente = $item["count"] + 1;
         }
-
-        $totalDesVotePourUnSondage = $this->connection->prepare("SELECT SUM(count) FROM responses WHERE id_survey = :id_Survey");
-        $totalDesVotePourUnSondage->bindParam(':id_Survey', $idSurvey);
-        $totalDesVotePourUnSondage->execute();
-        $totalDesVotePourUnSondage = $totalDesVotePourUnSondage->fetch(PDO::FETCH_ASSOC)['SUM(count)'] + 1;
-
 
         $bdd = $this->connection->prepare("UPDATE responses SET count = " . $valueVoteIncremente . " WHERE id = :id");
         $bdd->bindParam(':id', $id);
