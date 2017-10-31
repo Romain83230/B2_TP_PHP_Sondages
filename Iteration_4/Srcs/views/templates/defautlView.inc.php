@@ -7,6 +7,8 @@
             <?php
             foreach ($this->surveys as $survey) {
 
+                $total = $survey->computePercentages();
+
                 require("index.inc.php");
             }
             ?>

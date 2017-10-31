@@ -388,13 +388,12 @@ class Database
      * @param array $arraySurveys Tableau de lignes.
      * @return array(Survey)|boolean Le tableau de sondages ou false si une erreur s'est produite.
      */
-    private function loadSurveys($arraySurveys)
+    public function loadSurveys()
     {
         $surveys = array();
         /* TODO START */
 
         $result = $this->connection->prepare("SELECT * FROM surveys");
-        $result->bindParam(':nickanme', $owner);
         $result->execute();
 
         if ($result->rowCount() == 0) return $surveys;
@@ -403,17 +402,13 @@ class Database
                 $resultatQuestion = $this->connection->prepare("SELECT * FROM responses WHERE id_survey = :id_survey");
                 $resultatQuestion->bindParam(':id_survey', $row["id"]);
                 $resultatQuestion->execute();
-//                var_dump($row);
 
                 $survey = new Survey($row["owner"], $row["question"]);
                 $survey->setId($row["id"]);
                 $survey->setResponses($this->loadResponses($survey, $resultatQuestion->fetchAll()));
-
                 $surveys[] = $survey;
             }
-
         }
-
         /* TODO END */
         return $surveys;
     }

@@ -11,8 +11,7 @@ class DefaultAction extends Action {
 	 */
 	public function run() {
         $this->setView(getViewByName("Default"));
-        $this->getView()->setSurveys($this->database->loadOneSurvey($this->getSessionLogin(), 1));
-
+        $this->getView()->setSurveys($this->database->loadSurveys());
 	}
 
 }
