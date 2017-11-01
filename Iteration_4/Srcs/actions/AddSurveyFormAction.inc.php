@@ -29,8 +29,10 @@ class AddSurveyFormAction extends Action {
 			$this->setMessageView("Vous devez être authentifié.", "alert-error");
 			return;
 		}
-		
-		$this->setView(getViewByName("AddSurveyForm"));
+
+        $this->setView(getViewByName("AddSurveyForm"));
+        $this->getView()->setList($this->database->dropDownListCatagory());
+
 	}
 
 }

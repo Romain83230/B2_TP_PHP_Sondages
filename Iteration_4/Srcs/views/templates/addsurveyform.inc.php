@@ -33,6 +33,19 @@ function generateInputForResponse($n) {
 		?>
 	</div>
 	<div class="modal-footer">
+
+        <select id="listCategory" class="list-group">
+            <?php
+
+                for ($i = 0; $i < sizeof($this->list); $i++) {
+                    echo '<option id="categoryFirst" value="SelectCategory"> --Categorie-- </option>';
+                    echo '<option id="' . $this->list[$i] .  '" value="' . $this->list[$i] .  '"> ' . $this->list[$i] .  ' </option>';
+                }
+
+            ?>
+
+        </select>
+
 		<input class="btn btn-danger" type="submit"	value="Poster le sondage" />
 	</div>
 </form>

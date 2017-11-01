@@ -2,7 +2,7 @@
     <div class="media-body">
 
 
-        <form class=".span1." method="post" action="<?php echo $_SERVER['PHP_SELF'] . '?action=UpdateSondage'; ?>">
+        <form class="form-group-lg" style="position: relative; left: 420px" method="post" action="<?php echo $_SERVER['PHP_SELF'] . '?action=UpdateSondage'; ?>">
             <button class="fa fa-trash-o" name="Delete"  value="<?php echo $survey -> getId()?>" type="submit">
             </button>
             <button class="fa fa-pencil-square-o" name="Modifier"  value="<?php echo $survey -> getId()?>" type="submit">

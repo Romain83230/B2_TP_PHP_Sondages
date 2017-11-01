@@ -10,6 +10,7 @@ class DefaultAction extends Action {
 	 * @see Action::run()
 	 */
 	public function run() {
+		$this->database->dropDownListCatagory();
         $this->setView(getViewByName("Default"));
         $this->getView()->setSurveys($this->database->loadSurveys());
 	}

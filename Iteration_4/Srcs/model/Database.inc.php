@@ -55,6 +55,7 @@ class Database
             ");" . "CREATE TABLE IF NOT EXISTS surveys (" .
             " id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,	" .
             " owner CHAR(20)," .
+            " category CHAR(50)," .
             " question CHAR(250)" .
             ");" . "CREATE TABLE IF NOT EXISTS responses (" .
             " id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,	" .
@@ -497,6 +498,25 @@ class Database
 
         return true;
 
+    }
+
+    public function dropDownListCatagory() {
+
+        $list = array();
+
+        $getList = $this->connection -> prepare("SELECT DISTINCT category FROM surveys");
+        $getList ->execute();
+
+        $getList = $getList->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+        for ($i = 0; $i < sizeof($getList) ; $i++) {
+            array_push($list, $getList[$i]['category']);
+        }
+
+        array_push($list, "Nouvelle catégorie");
+        return $list;
     }
 
 
