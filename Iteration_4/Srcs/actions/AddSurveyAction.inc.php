@@ -40,7 +40,7 @@ class AddSurveyAction extends Action
             } else {
                 $reponse = array();
                 for ($i = 1; $i <= 6; $i++) {
-                    if (( $i == 6 || ($_POST['responseSurvey' . $i]) == null)){
+                    if (($i == 6 || ($_POST['responseSurvey' . $i]) == null)) {
                         continue;
                     }
                     $reponse[$i] = htmlentities($_POST['responseSurvey' . $i]);
@@ -49,11 +49,34 @@ class AddSurveyAction extends Action
                     $this->setView(getViewByName("Message"));
                     $this->getView()->setMessage("Il faut saisir au moins 2 réponses.");
                 } else {
-                    array_unshift($reponse, htmlentities($_POST['questionSurvey']));
 
-                    if (($this->database->saveSurvey($reponse, $this->getSessionLogin())) === true) {
+                    if ((!isset($_POST['category']) || ($_POST['category'] == "category") || ($_POST['category'] == "")) && ($_POST['nouvelleCatégorie'] == '')) {
+
                         $this->setView(getViewByName("Message"));
-                        $this->getView()->setMessage("Merci, nous avons ajouté votre sondage");
+                        $this->getView()->setMessage("Vous devez sélectionner une catégorie pour votre sondage");
+
+                    } else {
+
+                        if ($_POST['nouvelleCatégorie'] != '') {
+
+                            array_unshift($reponse, htmlentities($_POST['questionSurvey']));
+                            if (($this->database->saveSurvey($reponse, htmlentities($_POST['nouvelleCatégorie']), ($this->getSessionLogin())) === true)) {
+                                $this->setView(getViewByName("Message"));
+                                $this->getView()->setMessage("Merci, nous avons ajouté votre sondage");
+                            } else {
+                                $this->setView(getViewByName("Message"));
+                                $this->getView()->setMessage("Un problème est survenu lors de l'ajout de votre sondage à la base de donnée");
+                            }
+                        } else {
+                            array_unshift($reponse, htmlentities($_POST['questionSurvey']));
+                            if (($this->database->saveSurvey($reponse, $_POST['category'], ($this->getSessionLogin())) === true)) {
+                                $this->setView(getViewByName("Message"));
+                                $this->getView()->setMessage("Merci, nous avons ajouté votre sondage");
+                            } else {
+                                $this->setView(getViewByName("Message"));
+                                $this->getView()->setMessage("Un problème est survenu lors de l'ajout de votre sondage à la base de donnée");
+                            }
+                        }
                     }
                 }
             }

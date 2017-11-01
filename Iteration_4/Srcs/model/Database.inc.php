@@ -230,12 +230,12 @@ class Database
      * @param Survey $survey Sondage à sauvegarder.
      * @return boolean True si la sauvegarde a été réalisée avec succès, false sinon.
      */
-    public function saveSurvey(array $survey, $nickname)
+    public function saveSurvey(array $survey, $category, $nickname )
     {
         /* TODO START */
 
         $question = trim($survey[0]);
-        $postQuestion = $this->connection->exec("INSERT INTO surveys (question, owner) VALUES (\"$question\", \"$nickname\") ");
+        $postQuestion = $this->connection->exec("INSERT INTO surveys (question, owner, category) VALUES (\"$question\", \"$nickname\", \"$category\") ");
         $idSurvey = $this->connection->query("SELECT id FROM surveys WHERE question = \"$question\" ");
         $id = $idSurvey->fetch()['id'];
         if ($postQuestion) {
@@ -515,7 +515,6 @@ class Database
             array_push($list, $getList[$i]['category']);
         }
 
-        array_push($list, "Nouvelle catégorie");
         return $list;
     }
 
