@@ -1,6 +1,5 @@
 <?php
 
-
 session_start();
 
 function getActionByName($name) {

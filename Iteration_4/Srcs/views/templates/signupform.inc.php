@@ -1,3 +1,9 @@
+<?php
+
+require_once "Facebook/config.php";
+
+?>
+
 <form method="post" action="index.php?action=SignUp" class="modal">
 	<div class="modal-header">
 		<h3>Inscription</h3>
@@ -27,7 +33,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-        <?php require "Facebook/login.php" ?>
+        <input type="button" onclick="window.location = '<?php echo $loginUrl ?>'" value="Se connecter avec Facebook" class="btn btn-primary" >
 		<input class="btn btn-danger" type="submit" value="Créer mon compte" />
 	</div>
 </form>
