@@ -32,7 +32,8 @@ function getAction() {
 			'Search',
 			'Vote',
             'UpdateSondage',
-            'ModifierSondage'
+            'ModifierSondage',
+            'SearchFr'
 	);
 
 	if (!in_array($action, $actions)) $action = 'Default';

@@ -1,7 +1,9 @@
-<li class="media well">
-    <div class="media-body">
 
-        <h4 class="media-heading" ><?php echo $survey->getQuestion() ?></h4>
+<div class="media-body">
+    <li class="media well">
+
+
+        <h4 class="media-heading"><?php echo $survey->getQuestion() ?></h4>
         <br>
         <?php
         foreach ($survey->getResponses() as $response) {
@@ -18,14 +20,14 @@
             <input type="hidden" name="responseId" value="<?php echo $response->getID() ?>">
             <input type="submit" style="margin-left:5px" class="span1 btn btn-small btn-danger" value="Voter">
         </form>
-    </div>
-    <?php
-    /* TODO END */
-    }
-    ?>
+</div>
+<?php
+/* TODO END */
+}
+?>
 
 
-    </div>
+</div>
 </li>
 
 

@@ -339,31 +339,47 @@ class Database
      */
 
 
-    public function loadSurveysByKeyword($keyword)
+    public function loadSurveysByKeyword($keyword ="" , $categori = "")
     {
         /* TODO START */
 
-        $recherche = $this->connection -> prepare("SELECT * FROM surveys WHERE question LIKE :word");
-        $recherche -> bindParam(':word', $keyword);
-        $recherche -> execute();
-        $sondages = [];
+        if ($categori == "") {
+            $recherche = $this->connection->prepare("SELECT * FROM surveys WHERE question LIKE :word");
+            $recherche->bindParam(':word', $keyword);
+            $recherche->execute();
+            $sondages = [];
 
-        if ($recherche->rowCount() == 0) return $sondages;
-        else {
-            foreach ($recherche as $row) {
-                $resultatQuestion = $this->connection->prepare("SELECT * FROM responses WHERE id_survey = :id_survey");
-                $resultatQuestion->bindParam(':id_survey', $row["id"]);;
-                $resultatQuestion->execute();
+        } elseif ($keyword == "" && $categori != "") {
+            $recherche = $this->connection->prepare("SELECT * FROM surveys WHERE category =:word");
+            $recherche->bindParam(':word', $categori);
+            $recherche->execute();
+            $sondages = [];
+        } else {
+            $recherche = $this->connection->prepare("SELECT * FROM surveys WHERE category = :cat AND question LIKE :word");
+            $recherche->bindParam(':cat', $categori);
+            $recherche->bindParam(':word', $keyword);
+            $recherche->execute();
+            $sondages = [];
+        }
+            if ($recherche->rowCount() == 0) return $sondages;
+            else {
+                foreach ($recherche as $row) {
+                    $resultatQuestion = $this->connection->prepare("SELECT * FROM responses WHERE id_survey = :id_survey");
+                    $resultatQuestion->bindParam(':id_survey', $row["id"]);;
+                    $resultatQuestion->execute();
 
-                $survey = new Survey($row["owner"], $row["question"]);
-                $survey->setId($row["id"]);
-                $survey->setResponses($this->loadResponses($survey, $resultatQuestion->fetchAll()));
+                    $survey = new Survey($row["owner"], $row["question"]);
+                    $survey->setId($row["id"]);
+                    $survey->setResponses($this->loadResponses($survey, $resultatQuestion->fetchAll()));
 
-                $sondages[] = $survey;
+                    $sondages[] = $survey;
+                }
+
+                return $sondages;
             }
 
-            return $sondages;
-        }
+
+
 
 
         /* TODO END */

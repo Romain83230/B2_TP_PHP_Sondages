@@ -18,23 +18,30 @@ class SearchAction extends Action {
 		/* TODO START */
 
 
-        $pseudo = $this->getSessionLogin();
 
-        if ($pseudo == null ) {
+
+		$keyword = $_POST['keyword'];
+		$categori = $_POST['category'];
+
+		if (($keyword == '' && $categori == 'category')) {
             $this->setView(getViewByName("Message"));
-            $this->getView()->setMessage("Veuillez-vous connecter");
+            $this->getView()->setMessage("Merci de rechercher un terme, et/ou une catégorie");
         } else {
-
-        	if (isset($_POST['keyword'])) {
-        		$word = $_POST['keyword'];
+		    // mot clé, sans catégori
+		    if ($keyword != '' && $categori == 'category') {
                 $this->setView(getViewByName("Surveys"));
-                $this->getView()->setSurveys($this->database->loadSurveysByKeyword($word));
+                $this->getView()->setSurveys($this ->database -> loadSurveysByKeyword($keyword));
 
-			} else {
-                $this->setView(getViewByName("Message"));
-                $this->getView()->setMessage("Veuillez indiquer un terme à rechercher");
-			}
+                // mot clé + catégori
+            } elseif ($keyword != '' && $categori != 'category') {
+                $this->setView(getViewByName("Surveys"));
+                $this->getView()->setSurveys($this ->database -> loadSurveysByKeyword($keyword, $categori));
 
+		        // sans mot clé, mais catégorie
+            } else {
+                $this->setView(getViewByName("Surveys"));
+                $this->getView()->setSurveys($this ->database -> loadSurveysByKeyword($keyword="", $categori));
+            }
 
         }
 
