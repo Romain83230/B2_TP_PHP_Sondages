@@ -16,10 +16,6 @@ class SearchAction extends Action {
 	 */
 	public function run() {
 		/* TODO START */
-
-
-
-
 		$keyword = $_POST['keyword'];
 		$categori = $_POST['category'];
 

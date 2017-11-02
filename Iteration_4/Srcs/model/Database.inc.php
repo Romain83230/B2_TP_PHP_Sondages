@@ -62,6 +62,10 @@ class Database
             " id_survey INTEGER," .
             " title CHAR(255)," .
             "count INTEGER DEFAULT 0 " .
+            ");" . "CREATE TABLE IF NOT EXISTS commentaire (" .
+            " id_commentaire INT NOT NULL AUTO_INCREMENT PRIMARY KEY ," .
+            " id_survey INTEGER, " .
+            " commentaire CHAR(250)" .
             ");");
         $this->connection->exec("ALTER TABLE surveys ADD CONSTRAINT FK_users_nickname 
                                               FOREIGN KEY (owner) REFERENCES nickname.users;" .
@@ -230,7 +234,7 @@ class Database
      * @param Survey $survey Sondage à sauvegarder.
      * @return boolean True si la sauvegarde a été réalisée avec succès, false sinon.
      */
-    public function saveSurvey(array $survey, $category, $nickname )
+    public function saveSurvey(array $survey, $category, $nickname)
     {
         /* TODO START */
 
@@ -302,7 +306,7 @@ class Database
         /* TODO END */
     }
 
-    public function loadOneSurvey($owner, $idSurvey)
+    public function loadOneSurvey($idSurvey)
     {
         /* TODO START */
 
@@ -339,7 +343,7 @@ class Database
      */
 
 
-    public function loadSurveysByKeyword($keyword ="" , $categori = "")
+    public function loadSurveysByKeyword($keyword = "", $categori = "")
     {
         /* TODO START */
 
@@ -361,25 +365,22 @@ class Database
             $recherche->execute();
             $sondages = [];
         }
-            if ($recherche->rowCount() == 0) return $sondages;
-            else {
-                foreach ($recherche as $row) {
-                    $resultatQuestion = $this->connection->prepare("SELECT * FROM responses WHERE id_survey = :id_survey");
-                    $resultatQuestion->bindParam(':id_survey', $row["id"]);;
-                    $resultatQuestion->execute();
+        if ($recherche->rowCount() == 0) return $sondages;
+        else {
+            foreach ($recherche as $row) {
+                $resultatQuestion = $this->connection->prepare("SELECT * FROM responses WHERE id_survey = :id_survey");
+                $resultatQuestion->bindParam(':id_survey', $row["id"]);;
+                $resultatQuestion->execute();
 
-                    $survey = new Survey($row["owner"], $row["question"]);
-                    $survey->setId($row["id"]);
-                    $survey->setResponses($this->loadResponses($survey, $resultatQuestion->fetchAll()));
+                $survey = new Survey($row["owner"], $row["question"]);
+                $survey->setId($row["id"]);
+                $survey->setResponses($this->loadResponses($survey, $resultatQuestion->fetchAll()));
 
-                    $sondages[] = $survey;
-                }
-
-                return $sondages;
+                $sondages[] = $survey;
             }
 
-
-
+            return $sondages;
+        }
 
 
         /* TODO END */
@@ -516,23 +517,49 @@ class Database
 
     }
 
-    public function dropDownListCatagory() {
+    public function dropDownListCatagory()
+    {
 
         $list = array();
 
-        $getList = $this->connection -> prepare("SELECT DISTINCT category FROM surveys");
-        $getList ->execute();
+        $getList = $this->connection->prepare("SELECT DISTINCT category FROM surveys");
+        $getList->execute();
 
         $getList = $getList->fetchAll(PDO::FETCH_ASSOC);
 
 
-
-        for ($i = 0; $i < sizeof($getList) ; $i++) {
+        for ($i = 0; $i < sizeof($getList); $i++) {
             array_push($list, $getList[$i]['category']);
         }
 
         return $list;
     }
+
+    public function listAllCommentaireForOneSurvey($idSurvey)
+    {
+        $com = array();
+        /* TODO START */
+        $commentaire = $this->connection->prepare("SELECT commentaire FROM commentaire WHERE id_survey =:idSurvey");
+        $commentaire->bindParam('idSurvey', $idSurvey);
+        $commentaire->execute();
+        $commentaire = $commentaire->fetchAll(PDO::FETCH_ASSOC);
+        $com[] = $commentaire;
+        return $com[0];
+    }
+
+    public function storeCommentaire($idSurvey, $commentaire) {
+
+        $postCommentaire = $this->connection->prepare("INSERT INTO commentaire (id_survey, commentaire) VALUES (:idSurvey, :commentaire) ");
+        $postCommentaire -> bindParam(':idSurvey', $idSurvey);
+        $postCommentaire -> bindParam(':commentaire', $commentaire);
+        if ($postCommentaire -> execute() === true) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
 
 
 }

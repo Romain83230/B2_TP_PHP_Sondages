@@ -31,7 +31,7 @@ class UpdateSondageAction extends Action
             var_dump($statueSondage);
 
             $this->setView(getViewByName("EditSurvey"));
-            $this->getView()->setSurveys($this->database->loadOneSurvey($this->getSessionLogin(), $statueSondage));
+            $this->getView()->setSurveys($this->database->loadOneSurvey($statueSondage));
 
 
         } else {
