@@ -25,7 +25,7 @@
 /* TODO END */
 }
 ?>
-<form class="form-group-lg" style="position: relative;" method="post" action="<?php echo $_SERVER['PHP_SELF'] . '?action=Commentaire'; ?>">
+<form class=".span1." style="position: relative;" method="post" action="<?php echo $_SERVER['PHP_SELF'] . '?action=Commentaire'; ?>">
     <input type="hidden" name="comments" value="<?php echo $survey->getId() ?>">
     <input type="submit" id = "commentaire" value="Afficher les commentaires">
 </form>
