@@ -20,4 +20,5 @@ class SearchView extends View
     {
         $this->list = $_list;
     }
+    
 }
