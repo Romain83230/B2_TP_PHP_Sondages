@@ -2,14 +2,22 @@
 <li class="media well">
     <div class="media-body">
 
+        <?php
+        if ($this->getBool() == null) {
 
-        <form class="form-group-lg" style="position: relative; left: 420px" method="post"
-              action="<?php echo $_SERVER['PHP_SELF'] . '?action=UpdateSondage'; ?>">
-            <button class="fa fa-trash-o" name="Delete" value="<?php echo $survey->getId() ?>" type="submit">
-            </button>
-            <button class="fa fa-pencil-square-o" name="Modifier" value="<?php echo $survey->getId() ?>" type="submit">
-            </button>
-        </form>
+            ?>
+            <form class="form-group-lg" style="position: relative; left: 420px" method="post"
+                  action="<?php echo $_SERVER['PHP_SELF'] . '?action=UpdateSondage'; ?>">
+                <button class="fa fa-trash-o" name="Delete" value="<?php echo $survey->getId() ?>" type="submit">
+                </button>
+                <button class="fa fa-pencil-square-o" name="Modifier" value="<?php echo $survey->getId() ?>"
+                        type="submit">
+                </button>
+            </form>
+
+            <?php
+        }
+        ?>
 
         <h4 name="<?php echo $survey->getID() ?>" class="media-heading"><?php echo $survey->getQuestion() ?></h4>
         <br>

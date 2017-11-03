@@ -38,7 +38,7 @@
         ?>
 
         <textarea name="textarea" >
-        </textarea>;
+        </textarea>
         <input type="hidden" name="idSurvey" value="<?php echo $survey->getID() ?>">
         <input type="submit" style="margin-left:5px" class="btn btn-danger" value="Poster commentaire">
     </form>
