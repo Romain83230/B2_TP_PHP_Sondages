@@ -66,7 +66,8 @@ class Database
             " id_commentaire INT NOT NULL AUTO_INCREMENT PRIMARY KEY ," .
             " id_survey INTEGER, " .
             " commentaire CHAR(250)," .
-            " owner CHAR(20)" .
+            " owner CHAR(20)," .
+            " heure CHAR(100)" .
             ");");
         $this->connection->exec("ALTER TABLE surveys ADD CONSTRAINT FK_users_nickname 
                                               FOREIGN KEY (owner) REFERENCES nickname.users;" .
@@ -554,10 +555,14 @@ class Database
 
     public function storeCommentaire($idSurvey, $commentaire, $owner) {
 
-        $postCommentaire = $this->connection->prepare("INSERT INTO commentaire (id_survey, commentaire, owner) VALUES (:idSurvey, :commentaire, :owner) ");
+
+        $today = "Le " . getdate()['mday'] . " " . getdate()['month']. " " . getdate()['year'] . " à " . getdate()['hours'] . "h" . getdate()['minutes'];
+
+        $postCommentaire = $this->connection->prepare("INSERT INTO commentaire (id_survey, commentaire, owner, heure) VALUES (:idSurvey, :commentaire, :owner, :heure) ");
         $postCommentaire -> bindParam(':idSurvey', $idSurvey);
         $postCommentaire -> bindParam(':commentaire', $commentaire);
         $postCommentaire -> bindParam(':owner', $owner);
+        $postCommentaire -> bindParam(':heure', $today);
         if ($postCommentaire -> execute() === true) {
             return true;
         } else {

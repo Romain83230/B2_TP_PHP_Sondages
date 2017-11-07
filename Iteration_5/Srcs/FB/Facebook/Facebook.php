@@ -125,9 +125,9 @@ class Facebook
     public function __construct(array $config = [])
     {
         $config = array_merge([
-            'app_id' => getenv(static::APP_ID_ENV_NAME),
-            'app_secret' => getenv(static::APP_SECRET_ENV_NAME),
-            'default_graph_version' => static::DEFAULT_GRAPH_VERSION,
+            '290667678113610' => getenv(static::APP_ID_ENV_NAME),
+            'eb08da22b9dfb9f5a5cfd275c3a1c2aa' => getenv(static::APP_SECRET_ENV_NAME),
+            '2.1' => static::DEFAULT_GRAPH_VERSION,
             'enable_beta_mode' => false,
             'http_client_handler' => null,
             'persistent_data_handler' => null,

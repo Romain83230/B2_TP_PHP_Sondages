@@ -1,6 +1,7 @@
 <?php
 
 require_once "Facebook/autoload.php";
+require_once "vendor/autoload.php";
 
 $fb = new Facebook\Facebook([
     'app_id' => '290667678113610', // Replace {app-id} with your app id
@@ -10,7 +11,7 @@ $fb = new Facebook\Facebook([
 
 $helper = $fb->getRedirectLoginHelper();
 
-$redirectURL ="http://localhost/B2/B2_TP_PHP_Sondages/Iteration_5/Srcs/Facebook/fb-callback.php";
+$redirectURL ="http://localhost/B2/B2_TP_PHP_Sondages/Iteration_5/Srcs/FB/fb-callback.php";
 $permissions = ['email']; // Optional permissions
 $loginUrl = $helper->getLoginUrl($redirectURL, $permissions);
 

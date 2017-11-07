@@ -32,7 +32,7 @@
         <?php
         $sizeCom = sizeof($this->comm);
         for ($i = 0; $i < $sizeCom; $i++) {
-            echo '<label for="message"> <strong> ' . $this->comm[$i]["owner"] . ' </strong></label>';
+            echo '<label for="message"> <strong> ' . $this->comm[$i]["owner"] . '</strong> ' . $this->comm[$i]["heure"] . ' </label>';
             echo '<textarea readonly name="commentaire" >';
             echo $this->comm[$i]["commentaire"];
             echo '</textarea>';
