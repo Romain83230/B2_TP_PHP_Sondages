@@ -19,6 +19,8 @@ class SearchAction extends Action {
 		$keyword = $_POST['keyword'];
 		$categori = $_POST['category'];
 
+		$bool = $this->getSessionLogin();
+
 		if (($keyword == '' && $categori == 'category')) {
             $this->setView(getViewByName("Message"));
             $this->getView()->setMessage("Merci de rechercher un terme, et/ou une catégorie");
@@ -26,16 +28,19 @@ class SearchAction extends Action {
 		    // mot clé, sans catégori
 		    if ($keyword != '' && $categori == 'category') {
                 $this->setView(getViewByName("Surveys"));
+                $this->getView()->setBool($bool);
                 $this->getView()->setSurveys($this ->database -> loadSurveysByKeyword($keyword));
 
                 // mot clé + catégori
             } elseif ($keyword != '' && $categori != 'category') {
                 $this->setView(getViewByName("Surveys"));
+                $this->getView()->setBool($bool);
                 $this->getView()->setSurveys($this ->database -> loadSurveysByKeyword($keyword, $categori));
 
 		        // sans mot clé, mais catégorie
             } else {
                 $this->setView(getViewByName("Surveys"));
+                $this->getView()->setBool($bool);
                 $this->getView()->setSurveys($this ->database -> loadSurveysByKeyword($keyword="", $categori));
             }
 

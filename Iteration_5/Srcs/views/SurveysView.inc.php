@@ -5,6 +5,23 @@ class SurveysView extends View
 {
 
     private $surveys;
+    private $bool;
+
+    /**
+     * @return mixed
+     */
+    public function getBool()
+    {
+        return $this->bool;
+    }
+
+    /**
+     * @param mixed $bool
+     */
+    public function setBool($bool)
+    {
+        $this->bool = $bool;
+    }
 
     /**
      * Affiche la liste des sondages.
@@ -39,6 +56,8 @@ class SurveysView extends View
     {
         $this->surveys = $surveys;
     }
+
+
 
 }
 
