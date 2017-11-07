@@ -28,16 +28,18 @@
     ?>
 
     <form class=".span1." method="post" action="<?php echo $_SERVER['PHP_SELF'] . '?action=AddCommentaire'; ?>">
+
         <?php
         $sizeCom = sizeof($this->comm);
         for ($i = 0; $i < $sizeCom; $i++) {
+            echo '<label for="message"> <strong> ' . $this->comm[$i]["owner"] . ' </strong></label>';
             echo '<textarea readonly name="commentaire" >';
-                echo  $this->comm[$i]["commentaire"];
+            echo $this->comm[$i]["commentaire"];
             echo '</textarea>';
         }
         ?>
 
-        <textarea name="textarea" >
+        <textarea name="textarea">
         </textarea>;
         <input type="hidden" name="idSurvey" value="<?php echo $survey->getID() ?>">
         <input type="submit" style="margin-left:5px" class="btn btn-danger" value="Poster commentaire">

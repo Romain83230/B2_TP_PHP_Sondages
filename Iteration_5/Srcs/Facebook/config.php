@@ -10,7 +10,7 @@ $fb = new Facebook\Facebook([
 
 $helper = $fb->getRedirectLoginHelper();
 
-$redirectURL ="http://localhost/B2/B2_TP_PHP_Sondages/Iteration_4/Srcs/Facebook/fb-callback.php";
+$redirectURL ="http://localhost/B2/B2_TP_PHP_Sondages/Iteration_5/Srcs/Facebook/fb-callback.php";
 $permissions = ['email']; // Optional permissions
 $loginUrl = $helper->getLoginUrl($redirectURL, $permissions);
 

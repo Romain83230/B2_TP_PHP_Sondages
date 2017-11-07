@@ -13,7 +13,6 @@ class CommentaireView extends View
     private $surveys;
     private $comm;
 
-
     public function displayBody() {
         if (count($this->surveys) === 0) {
             echo '<div class="container">
@@ -27,7 +26,6 @@ class CommentaireView extends View
 
             require("templates/commentaires.inc.php");
         }
-
     }
 
 
@@ -39,5 +37,8 @@ class CommentaireView extends View
     {
         $this->comm = $_comm;
     }
+
+
+
 
 }
