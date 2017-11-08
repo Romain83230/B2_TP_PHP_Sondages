@@ -19,7 +19,7 @@ class AddCommentaireAction extends Action {
             $this->setView(getViewByName("Message"));
             $this->getView()->setMessage("Veuillez vous connecter");
         } else {
-            if ($this->database->storeCommentaire($idsurvey, $commentaire) === true) {
+            if ($this->database->storeCommentaire($idsurvey, $commentaire, $this->getSessionLogin()) === true) {
                 $this->setView(getViewByName("Message"));
                 $this->getView()->setMessage("Commentaire ajouté");
             } else {

@@ -65,12 +65,18 @@ class Database
             ");" . "CREATE TABLE IF NOT EXISTS commentaire (" .
             " id_commentaire INT NOT NULL AUTO_INCREMENT PRIMARY KEY ," .
             " id_survey INTEGER, " .
-            " commentaire CHAR(250)" .
+            " commentaire CHAR(250)," .
+            " owner CHAR(20)," .
+            " heure CHAR(100)" .
             ");");
         $this->connection->exec("ALTER TABLE surveys ADD CONSTRAINT FK_users_nickname 
                                               FOREIGN KEY (owner) REFERENCES nickname.users;" .
             "ALTER TABLE responses ADD CONSTRAINT FK_ID_SURVEY 
-                                              FOREIGN KEY (id_survey) REFERENCES surveys(id);");
+                                              FOREIGN KEY (id_survey) REFERENCES surveys(id);" .
+            "ALTER TABLE commentaire ADD CONSTRAINT FK_ID_COM_SONDAGE
+                                              FOREIGN KEY (id_survey) REFERENCES surveys(id);" .
+            "ALTER TABLE commentaire ADD CONSTRAINT FK_ID_COM_USER
+                                              FOREIGN KEY (owner) REFERENCES users(nickname);");
     }
 
     /**
@@ -539,7 +545,7 @@ class Database
     {
         $com = array();
         /* TODO START */
-        $commentaire = $this->connection->prepare("SELECT commentaire FROM commentaire WHERE id_survey =:idSurvey");
+        $commentaire = $this->connection->prepare("SELECT * FROM commentaire WHERE id_survey =:idSurvey");
         $commentaire->bindParam('idSurvey', $idSurvey);
         $commentaire->execute();
         $commentaire = $commentaire->fetchAll(PDO::FETCH_ASSOC);
@@ -547,11 +553,16 @@ class Database
         return $com[0];
     }
 
-    public function storeCommentaire($idSurvey, $commentaire) {
+    public function storeCommentaire($idSurvey, $commentaire, $owner) {
 
-        $postCommentaire = $this->connection->prepare("INSERT INTO commentaire (id_survey, commentaire) VALUES (:idSurvey, :commentaire) ");
+
+        $today = "Le " . getdate()['mday'] . " " . getdate()['month']. " " . getdate()['year'] . " à " . getdate()['hours'] . "h" . getdate()['minutes'];
+
+        $postCommentaire = $this->connection->prepare("INSERT INTO commentaire (id_survey, commentaire, owner, heure) VALUES (:idSurvey, :commentaire, :owner, :heure) ");
         $postCommentaire -> bindParam(':idSurvey', $idSurvey);
         $postCommentaire -> bindParam(':commentaire', $commentaire);
+        $postCommentaire -> bindParam(':owner', $owner);
+        $postCommentaire -> bindParam(':heure', $today);
         if ($postCommentaire -> execute() === true) {
             return true;
         } else {

@@ -18,6 +18,7 @@ class CommentaireAction extends Action
 
             $this->setView(getViewByName("Commentaire"));
             $this->getView()->setCom($this->database->listAllCommentaireForOneSurvey($idSurvey));
+
             $this->getView()->setComSurvey($this->database->loadOneSurvey($idSurvey));
 
 

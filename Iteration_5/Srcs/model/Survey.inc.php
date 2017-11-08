@@ -6,6 +6,7 @@ class Survey {
 	private $question;
 	private $responses;
 
+
 	public function __construct($owner, $question) {
 		$this->id = null;
 		$this->owner = $owner;

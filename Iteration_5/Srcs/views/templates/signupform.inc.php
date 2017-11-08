@@ -1,6 +1,6 @@
 <?php
 
-require_once "Facebook/config.php";
+require_once "FB/config.php";
 
 ?>
 
